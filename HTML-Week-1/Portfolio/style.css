@@ -1,0 +1,134 @@
+.nav_links {
+    list-style: none;
+    margin: 0;
+    padding: 0 ;
+    overflow: hidden;
+}
+
+.nav_links li {
+    float: left;
+}
+.title a {
+    text-decoration: none;
+}
+
+li a {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+.grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    /* background-color: var(--color-white);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+
+.home{
+    padding-left: 1rem;
+    display: flex;
+    justify-content: space-evenly;    
+}
+
+.about h2 {
+    text-align: center;
+}
+
+.about .p{
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.about__data {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem 2rem;
+}
+
+
+.skills h2{
+    text-align: center;
+}
+
+.skills p{
+    text-align: center;
+    padding-bottom: 1rem;
+
+
+}
+
+.skills__data {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem 2rem;
+}
+
+.qualification h2{
+    text-align: center;
+}
+
+.qualification .p{
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.qualification__data {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem 2rem;
+}
+
+.portfolio h2{
+    text-align: center;
+}
+
+.portfolio .p{
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.portfolio__data{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem 2rem;
+}
+
+.portfolio__data div{
+    padding: 1rem;
+}
+
+.contact h2{
+    text-align: center;
+}
+
+.contact .p{
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.contact__data{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem 2rem;
+}
+
+.footer{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 1rem 2rem;
+}
+
+.social-icon a {
+    padding-bottom: 1rem;
+    display: block;
+    text-decoration: none;
+}
