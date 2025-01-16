@@ -1039,7 +1039,7 @@ img {
     }
   
     .about__description {
-      text-align: justify;
+      text-align: left;
     }
     .about__info {
       justify-content: space-between;
