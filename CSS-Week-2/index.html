@@ -119,7 +119,19 @@
             <h2 class="section__title">About Me</h2>
             <span class="section__subtitle">My introduction</span>
             <div class="about__container container grid">
-                <img src="assets/img/Pro.jpg" alt="" class="about__img">
+                
+                <svg class="circle-svg about__img" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <mask id="circleMask" mask-type="alpha">
+                        <circle cx="100" cy="100" r="90" fill="white" />
+                    </mask>
+                    <g mask="url(#circleMask)">
+                        <circle cx="100" cy="100" r="90" fill="#ccc" />
+                        <image x="-40" y="10" width="300" height="300" xlink:href="assets/img/Pro.jpg" />
+                    </g>
+                </svg>
+
+
                 <div class="about__data">
                     <p class="about__description">
                         I'm a fourth-year CSE undergraduate, passionate about technology. I have a self-motivated and
@@ -279,19 +291,18 @@
         <section class="qualification__section service__section" id="qualification">
             <h2 class="section__title">Qualification</h2>
             <span class="section__subtitle">My personal journey</span>
-
+        
             <div class="qualification__container container grid services__container">
                 <!-- <div class="qualification__tabs">
-                    <div class="qualification__button button--flex qualification__active" data-target="#education">
-                        <i class="uil uil-graduation-cap qualification__icon"></i>
-                        Education
-                    </div>
-                </div> -->
-
+                            <div class="qualification__button button--flex qualification__active" data-target="#education">
+                                <i class="uil uil-graduation-cap qualification__icon"></i>
+                                Education
+                            </div>
+                        </div> -->
+        
                 <div class="qualification__sections">
                     <!--====== Qualification Content 1 ======-->
-                    <div class="qualification__content qualifiation__active services__content" data-content
-                        id="education">
+                    <div class="qualification__content qualifiation__active services__content" data-content id="education">
                         <!--====== Qualification 1 ======-->
                         <div class="qualification__data">
                             <div>
@@ -331,17 +342,17 @@
                                     </div>
                                 </div>
                             </div>
-
+        
                             <div>
                                 <span class="qualification__rounder"></span>
                                 <span class="qualification__line"></span>
                             </div>
                         </div>
-
+        
                         <!--====== Qualification 2 ======-->
                         <div class="qualification__data">
                             <div></div>
-
+        
                             <div>
                                 <span class="qualification__rounder"></span>
                                 <span class="qualification__line"></span>
@@ -380,7 +391,7 @@
                                 </div>
                             </div>
                         </div>
-
+        
                         <!--====== Qualification 3 ======-->
                         <div class="qualification__data">
                             <div>
@@ -421,7 +432,7 @@
                                     </div>
                                 </div>
                             </div>
-
+        
                             <div>
                                 <span class="qualification__rounder"></span>
                                 <!--<span class="qualification__line"></span>-->
