@@ -177,3 +177,59 @@ themeButton.addEventListener("click", () => {
   localStorage.setItem("selected-theme", getCurrentTheme());
   localStorage.setItem("selected-icon", getCurrentIcon());
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector(".contact__form");
+  const nameInput = document.querySelector("#name");
+  const emailInput = document.querySelector("#email");
+  const messageInput = document.querySelector("#message");
+
+  // Create notification container
+  const notificationContainer = document.createElement("div");
+  notificationContainer.id = "notification";
+  document.body.appendChild(notificationContainer);
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent actual form submission
+
+    let isValid = true;
+    let errorMessage = "";
+
+    // Name validation
+    if (nameInput.value.trim() === "") {
+      isValid = false;
+      errorMessage += "Name is required.<br>";
+    }
+
+    // Email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(emailInput.value.trim())) {
+      isValid = false;
+      errorMessage += "Enter a valid email address.<br>";
+    }
+
+    // Message validation
+    if (messageInput.value.trim() === "") {
+      isValid = false;
+      errorMessage += "Message cannot be empty.<br>";
+    }
+
+    if (isValid) {
+      showNotification("Form submitted successfully!", "success");
+      form.reset();
+    } else {
+      showNotification(errorMessage, "error");
+    }
+  });
+
+  function showNotification(message, type) {
+    notificationContainer.innerHTML = message;
+    notificationContainer.className = type;
+    notificationContainer.style.display = "block";
+
+    setTimeout(() => {
+      notificationContainer.style.display = "none";
+    }, 3000);
+  }
+});
