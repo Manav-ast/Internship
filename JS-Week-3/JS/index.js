@@ -159,26 +159,65 @@ const myArr2 = new Array(1, 2, 3, 4)
 // alert.log(calculator.mul());
 
 
-let ladder = {
-    step: 0,
-    up() {
-        this.step++;
-        return this;
-    },
-    down() {
-        this.step--;
-        return this;
-    },
-    showStep: function () { // shows the current step
-        alert(this.step);
-        return this;
-    }
-};  
+// let ladder = {
+//     step: 0,
+//     up() {
+//         this.step++;
+//         return this;
+//     },
+//     down() {
+//         this.step--;
+//         return this;
+//     },
+//     showStep: function () { // shows the current step
+//         alert(this.step);
+//         return this;
+//     }
+// };
 
-console.log(ladder
-    .up()
-    .up()
-    .down()
-    .showStep()
-    .down()
-    .showStep());
+// console.log(ladder
+//     .up()
+//     .up()
+//     .down()
+//     .showStep()
+//     .down()
+//     .showStep());
+
+
+
+// const xhr = new XMLHttpRequest();
+// xhr.onreadystatechange = function () {
+//     if (xhr.readyState === 4) {
+//         if (xhr.status === 200) {
+//             const jsonData = JSON.parse(xhr.responseText);
+//             console.log(jsonData);
+//         } else {
+//             console.error("Error: " + xhr.status);
+//         }
+//     }
+// };
+// xhr.onerror = function () {
+//     console.error("Network Error");
+// };
+// xhr.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+// xhr.send();
+
+
+const xhr = new XMLHttpRequest();
+const postsElement = document.getElementById("posts");
+
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+        const posts = JSON.parse(xhr.responseText);
+        displayPosts(posts);
+    }
+};
+xhr.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+xhr.send();
+function displayPosts(posts) {
+    posts.forEach(post => {
+        const postItem = document.createElement("li");
+        postItem.innerText = `${post.title} - ${post.body}`;
+        postsElement.appendChild(postItem);
+    });
+}
