@@ -413,7 +413,7 @@ button{
 
 
 .about__description {
-  text-align: center;
+  text-align: justify;
   margin-bottom: var(--mb-2-5);
 }
 
@@ -709,6 +709,14 @@ button{
 }
 
 /*================== Portfolio ==================*/
+
+#portfolio {
+  padding-top: 9rem;
+}
+
+.portfolio__button{
+  color: var(--first-color);
+}
 
 .portfolio__container {
   overflow: initial;
@@ -1095,7 +1103,7 @@ button{
   }
 
   .about__description {
-    text-align: initial;
+    text-align: justify;
   }
   .about__info {
     justify-content: space-between;
