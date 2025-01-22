@@ -43,24 +43,6 @@ skillsHeader.forEach((el) => {
   el.addEventListener("click", toggleSkills);
 });
 
-/*============== Qualification Skills ===============*/
-
-/*const tabs = document.querySelectorAll('[data-target]'),
-      tabContents = document.querySelectorAll('[data-content]')
-tabs.forEach(tab =>{
-    tab.addEventListener('click', () =>{
-        const target = document.querySelector(tab.dataset.target)
-        tabContents.forEach(tabContent =>{
-            tabContent.classList.remove('qualification__active')
-        })
-        target.classList.add('qualification__active')
-        tab.forEach(tab =>{
-            tab.classList.remove('qualification__active')
-        })
-        tab.classList.add('qualification__active')
-    })
-})      
-*/
 
 /*======================= Services Modal ===================*/
 const modalViews = document.querySelectorAll(".services__modal"),
@@ -104,7 +86,7 @@ var swiper = new Swiper(".portfolio__container", {
 const sections = document.querySelectorAll("section[id]");
 
 function scrollActive() {
-  const scrollY = window.pageYOffset;
+  const scrollY = window.scrollY;
 
   sections.forEach((current) => {
     const sectionHeight = current.offsetHeight;
@@ -216,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (isValid) {
+      sendEmail(nameInput.value, emailInput.value, messageInput.value);
       showNotification("Form submitted successfully!", "success");
       form.reset();
     } else {
@@ -231,5 +214,10 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
       notificationContainer.style.display = "none";
     }, 3000);
+  }
+
+  function sendEmail(name, email, message) {
+    const mailtoLink = `mailto:manavvaishnani.ast@gmail.com?subject=Message from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0A%0AFrom: ${encodeURIComponent(email)}`;
+    window.location.href = mailtoLink;
   }
 });
