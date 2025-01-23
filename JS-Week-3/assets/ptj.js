@@ -167,57 +167,82 @@ document.addEventListener("DOMContentLoaded", function () {
   const emailInput = document.querySelector("#email");
   const messageInput = document.querySelector("#message");
 
-  // Create notification container
-  const notificationContainer = document.createElement("div");
-  notificationContainer.id = "notification";
-  document.body.appendChild(notificationContainer);
+  // Create error message containers
+  const nameError = document.createElement("div");
+  nameError.className = "error-message";
+  nameInput.parentNode.insertBefore(nameError, nameInput.parentNode.firstChild);
+
+  const emailError = document.createElement("div");
+  emailError.className = "error-message";
+  emailInput.parentNode.insertBefore(emailError, emailInput.parentNode.firstChild);
+
+  const messageError = document.createElement("div");
+  messageError.className = "error-message";
+  messageInput.parentNode.insertBefore(messageError, messageInput.parentNode.firstChild);
+
+  // Create success message container
+  const successMessage = document.createElement("div");
+  successMessage.id = "success-message";
+  form.appendChild(successMessage);
 
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent actual form submission
 
     let isValid = true;
-    let errorMessage = "";
+    nameError.innerHTML = "";
+    nameError.style.color = "red";
+    emailError.innerHTML = "";
+    emailError.style.color = "red";
+    messageError.innerHTML = "";
+    messageError.style.color = "red";
+    successMessage.innerHTML = "";
 
     // Name validation
     if (nameInput.value.trim() === "") {
       isValid = false;
-      errorMessage += "Name is required.<br>";
+      nameError.innerHTML = "Name is required.";
     }
 
     // Email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(emailInput.value.trim())) {
       isValid = false;
-      errorMessage += "Enter a valid email address.<br>";
+      emailError.innerHTML = "Enter a valid email address.";
     }
 
     // Message validation
     if (messageInput.value.trim() === "") {
       isValid = false;
-      errorMessage += "Message cannot be empty.<br>";
+      messageError.innerHTML = "Message cannot be empty.";
     }
 
     if (isValid) {
       sendEmail(nameInput.value, emailInput.value, messageInput.value);
-      showNotification("Form submitted successfully!", "success");
+      successMessage.innerHTML = "Form submitted successfully!";
+      successMessage.className = "success-message";
       form.reset();
-    } else {
-      showNotification(errorMessage, "error");
+
+      setTimeout(() => {
+        successMessage.innerHTML = "";
+      }, 3000);
     }
   });
 
-  function showNotification(message, type) {
-    notificationContainer.innerHTML = message;
-    notificationContainer.className = type;
-    notificationContainer.style.display = "block";
-
-    setTimeout(() => {
-      notificationContainer.style.display = "none";
-    }, 3000);
+  // Remove error message when user starts typing
+  function clearError(event) {
+    const target = event.target;
+    if (target === nameInput) nameError.innerHTML = "";
+    if (target === emailInput) emailError.innerHTML = "";
+    if (target === messageInput) messageError.innerHTML = "";
   }
+
+  nameInput.addEventListener("input", clearError);
+  emailInput.addEventListener("input", clearError);
+  messageInput.addEventListener("input", clearError);
 
   function sendEmail(name, email, message) {
     const mailtoLink = `mailto:manavvaishnani.ast@gmail.com?subject=Message from ${encodeURIComponent(name)}&body=${encodeURIComponent(message)}%0A%0AFrom: ${encodeURIComponent(email)}`;
     window.location.href = mailtoLink;
   }
 });
+
