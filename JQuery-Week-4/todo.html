@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl max-h-[100vh]">
+        <h1 class="text-2xl font-bold text-center mb-4">To-Do List</h1>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <input type="text" id="todoInput" placeholder="Enter a task" class="w-full border border-gray-300 rounded-lg p-2" />
+            <input type="hidden" id="editingTask" value="" />
+            <button id="addTaskButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add</button>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <input type="text" id="searchInput" placeholder="Search task" class="w-full border border-gray-300 rounded-lg p-2" />
+            <button id="sortButton" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">Sort A-Z</button>
+        </div>
+        
+        <div id="taskCounters" class="grid grid-cols-3 gap-4 mb-4 text-center">
+            <p>Total Tasks: <span id="totalTasks">0</span></p>
+            <p>Open Tasks: <span id="openTasks">0</span></p>
+            <p>Completed Tasks: <span id="completedTasks">0</span></p>
+        </div>
+        
+        <h2 class="text-xl font-semibold">Open Tasks</h2>
+        <ul id="openTaskList" class="list-none space-y-2 max-h-[30vh] overflow-auto"></ul>
+        
+        <h2 class="text-xl font-semibold mt-4">Completed Tasks</h2>
+        <ul id="completedTaskList" class="list-none space-y-2 max-h-[20vh] overflow-auto"></ul>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#todoInput').on('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    $('#addTaskButton').click();
+                }
+            });
+
+            $('#searchInput').on('input', function() {
+                const query = $(this).val().toLowerCase();
+                $('li').each(function() {
+                    $(this).toggle($(this).text().toLowerCase().includes(query));
+                });
+            });
+            
+            let sortAsc = true;
+            $('#sortButton').on('click', function() {
+                sortAsc = !sortAsc;
+                $(this).text(sortAsc ? 'Sort Z-A' : 'Sort A-Z');
+                sortTasks();
+            });
+            
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            renderTasks(tasks);
+            updateCounters();
+
+            $('#addTaskButton').on('click', function() {
+                const taskText = $('#todoInput').val().trim();
+                const editingTask = $('#editingTask').val();
+
+                if (!taskText || tasks.some(task => task.text === taskText && task.text !== editingTask)) return;
+
+                if (editingTask) {
+                    updateTask(editingTask, taskText);
+                    $('#editingTask').val('');
+                    $('#addTaskButton').text('Add');
+                } else {
+                    const createdDate = new Date().toISOString();
+                    tasks.push({ text: taskText, completed: false, createdDate });
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    renderTasks(tasks);
+                }
+                
+                $('#todoInput').val('');
+                updateCounters();
+            });
+
+            function renderTasks(tasks) {
+                $('#openTaskList, #completedTaskList').empty();
+                tasks.forEach(task => renderTask(task.text, task.completed, task.createdDate));
+            }
+            
+            function renderTask(text, completed, createdDate) {
+                const li = $('<li></li>').addClass(`flex justify-between items-center border rounded-lg p-2 gap-2 ${completed ? 'bg-green-100' : 'bg-white'}`);
+                const taskDetails = $('<div></div>').addClass('flex-1').append(
+                    $('<span></span>').text(text).addClass(`${completed ? 'line-through text-gray-500' : ''}`),
+                    $('<small></small>').text(` (Created: ${moment(createdDate).fromNow()})`).addClass('text-gray-500 block mt-1')
+                );
+                
+                const editButton = $('<button></button>').text('Edit').addClass('bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600')
+                    .on('click', function() {
+                        $('#todoInput').val(text);
+                        $('#editingTask').val(text);
+                        $('#addTaskButton').text('Save');
+                    });
+                
+                const completeButton = $('<button></button>').text(completed ? 'Undo' : 'Complete').addClass(`bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 ${completed ? 'bg-yellow-500 hover:bg-yellow-600' : ''}`)
+                    .on('click', function() {
+                        toggleTaskCompletion(text);
+                        renderTasks(tasks);
+                        updateCounters();
+                    });
+                
+                const deleteButton = $('<button></button>').text('Delete').addClass('bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600')
+                    .on('click', function() {
+                        removeTask(text);
+                        renderTasks(tasks);
+                        updateCounters();
+                    });
+                
+                li.append(taskDetails, editButton, completeButton, deleteButton);
+                $(completed ? '#completedTaskList' : '#openTaskList').append(li);
+            }
+            
+            function updateTask(oldText, newText) {
+                const task = tasks.find(t => t.text === oldText);
+                if (task) {
+                    task.text = newText;
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    renderTasks(tasks);
+                }
+            }
+
+            function toggleTaskCompletion(text) {
+                const task = tasks.find(t => t.text === text);
+                if (task) {
+                    task.completed = !task.completed;
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                }
+            }
+            
+            function removeTask(text) {
+                tasks = tasks.filter(task => task.text !== text);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+            
+            function sortTasks() {
+                tasks.sort((a, b) => sortAsc ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text));
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                renderTasks(tasks);
+            }
+            
+            function updateCounters() {
+                const total = tasks.length;
+                const completed = tasks.filter(task => task.completed).length;
+                $('#totalTasks').text(total);
+                $('#openTasks').text(total - completed);
+                $('#completedTasks').text(completed);
+            }
+        });
+    </script>
+</body>
+</html>
