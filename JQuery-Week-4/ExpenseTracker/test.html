@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <main class="container mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center mb-6">Expense Tracker</h1>
+        
+        <!-- Navigation Buttons -->
+        <div class="flex gap-4 mb-6">
+            <button onclick="showSection('dashboard')" class="btn">Dashboard</button>
+            <button onclick="showSection('groups')" class="btn">Group</button>
+            <button onclick="showSection('expenses')" class="btn">Expense</button>
+        </div>
+
+        <hr class="mb-6">
+
+        <!-- Dashboard -->
+        <section id="dashboard">
+            <h2 class="text-xl font-semibold">Dashboard</h2>
+            <p>Total Expense: ₹<span id="total-expense">0</span></p>
+            <p>Monthly Expense: ₹<span id="monthly-expense">0</span></p>
+            <p>Highest Spending: ₹<span id="highest-spending">0</span></p>
+
+            <div class="month-selector">
+                <label for="month-dropdown">Select Month: </label>
+                <select id="month-dropdown" class="text-sm">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+
+            <!-- Group-wise Expense Info -->
+            <h3 class="mt-6 text-lg">Group-wise Expenses</h3>
+            <div id="group-expenses-list"></div>
+
+            <!-- Chart Container -->
+            <div class="mt-6">
+                <canvas id="expense-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Group Management -->
+        <section id="groups" class="hidden">
+            <h2 class="text-xl font-semibold">Group Management</h2>
+            <input type="text" id="group-name" placeholder="Group Name" class="input">
+            <button onclick="addGroup()" class="btn">Add Group</button>
+            
+            <!-- Group Table -->
+            <div class="scrollable-table">
+                <table class="w-full border">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2">Group Name</th>
+                            <th class="border p-2">Created At</th>
+                            <th class="border p-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="group-table"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Expense Management -->
+        <section id="expenses" class="hidden">
+            <h2 class="text-xl font-semibold">Expense Management</h2>
+            <select id="expense-group" class="input"></select>
+            <input type="text" id="expense-name" placeholder="Expense Name" class="input">
+            <input type="number" id="expense-amount" placeholder="Amount" class="input">
+            <input type="date" id="expense-date" class="input">
+            <button onclick="addExpense()" class="btn">Add Expense</button>
+            
+            <!-- Expense Table -->
+            <div class="scrollable-table">
+                <table class="w-full border">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2">Name</th>
+                            <th class="border p-2">Amount (₹)</th>
+                            <th class="border p-2">Date</th>
+                            <th class="border p-2">Group</th>
+                            <th class="border p-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expense-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+
+    <style>
+        .hidden { display: none; }
+        .btn { background: #2563eb; color: white; padding: 8px 12px; border-radius: 5px; margin-top: 5px; }
+        .input { border: 1px solid gray; padding: 6px; border-radius: 4px; margin-top: 5px; display: block; width: 100%; }
+        th, td { text-align: left; }
+    </style>
+
+    <script>
+        let chartInstance = null; // Store Chart.js instance
+        let currentMonth = new Date().getMonth(); // Set current month as default
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadGroups();
+            loadExpenses();
+            updateDashboard();
+            setupMonthDropdown(); // Setup month selection dropdown
+        });
+        // Setup Month Dropdown
+        function setupMonthDropdown() {
+            let monthDropdown = document.getElementById("month-dropdown");
+            for (let i = 0; i < 12; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.innerHTML = new Date(2025, i).toLocaleString('default', { month: 'long' });
+                monthDropdown.appendChild(option);
+            }
+            monthDropdown.addEventListener("change", (e) => {
+                currentMonth = parseInt(e.target.value); // Update the current month based on selection
+                updateDashboard(); // Update the dashboard and chart
+            });
+        }
+
+
+
+        // Toggle Sections
+        function showSection(section) {
+            document.getElementById("dashboard").classList.add("hidden");
+            document.getElementById("groups").classList.add("hidden");
+            document.getElementById("expenses").classList.add("hidden");
+            document.getElementById(section).classList.remove("hidden");
+        }
+
+        // Group Management
+        function addGroup() {
+            let groupName = document.getElementById("group-name").value.trim();
+            if (!groupName) return alert("Enter a valid group name!");
+
+            let groups = JSON.parse(localStorage.getItem("groups")) || [];
+            groups.push({ name: groupName, createdAt: new Date().toISOString() });
+            localStorage.setItem("groups", JSON.stringify(groups));
+
+            document.getElementById("group-name").value = "";
+            loadGroups();
+        }
+
+        // Delete Group and Related Expenses
+        function deleteGroup(index) {
+            let groups = JSON.parse(localStorage.getItem("groups")) || [];
+            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+            // Remove the group from the groups list
+            groups.splice(index, 1);
+            localStorage.setItem("groups", JSON.stringify(groups));
+
+            // Remove expenses related to this group
+            expenses = expenses.filter(expense => expense.groupIndex != index);
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+
+            // Re-index expenses to account for the group deletion
+            expenses.forEach((expense, idx) => {
+                if (expense.groupIndex > index) {
+                    expense.groupIndex -= 1; // Decrease the group index if it's after the deleted group
+                }
+            });
+
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+
+            loadGroups();  // Reload groups
+            loadExpenses();  // Reload expenses
+            updateDashboard();  // Update the dashboard
+        }
+
+
+        function loadGroups() {
+            let groups = JSON.parse(localStorage.getItem("groups")) || [];
+            let groupTable = document.getElementById("group-table");
+            let expenseDropdown = document.getElementById("expense-group");
+
+            groupTable.innerHTML = "";
+            expenseDropdown.innerHTML = "<option>Select Group</option>";
+
+            groups.forEach((group, index) => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="border p-2">${group.name}</td>
+                    <td class="border p-2">${new Date(group.createdAt).toLocaleDateString()}</td>
+                    <td class="border p-2"><button onclick="deleteGroup(${index})" class="btn bg-red-500">Delete</button></td>
+                `;
+                groupTable.appendChild(tr);
+
+                let option = document.createElement("option");
+                option.value = index;
+                option.textContent = group.name;
+                expenseDropdown.appendChild(option);
+            });
+        }
+
+        // Expense Management
+        function addExpense() {
+            let groupIndex = document.getElementById("expense-group").value;
+            let expenseName = document.getElementById("expense-name").value.trim();
+            let expenseAmount = parseFloat(document.getElementById("expense-amount").value);
+            let expenseDate = document.getElementById("expense-date").value;
+
+            if (!expenseName || isNaN(expenseAmount) || !expenseDate || groupIndex === "Select Group") {
+                return alert("Enter valid details!");
+            }
+
+            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+            expenses.push({ name: expenseName, amount: expenseAmount, date: expenseDate, groupIndex: groupIndex });
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+
+            document.getElementById("expense-name").value = "";
+            document.getElementById("expense-amount").value = "";
+            document.getElementById("expense-date").value = "";
+            loadExpenses();
+            updateDashboard();
+        }
+
+        function deleteExpense(index) {
+            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+            expenses.splice(index, 1);
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            loadExpenses();
+            updateDashboard();
+        }
+
+        function loadExpenses() {
+            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+            let groups = JSON.parse(localStorage.getItem("groups")) || [];
+            let expenseTable = document.getElementById("expense-table");
+
+            expenseTable.innerHTML = "";
+
+            expenses.forEach((expense, index) => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="border p-2">${expense.name}</td>
+                    <td class="border p-2">₹${expense.amount}</td>
+                    <td class="border p-2">${new Date(expense.date).toLocaleDateString()}</td>
+                    <td class="border p-2">${groups[expense.groupIndex]?.name || "Unknown"}</td>
+                    <td class="border p-2"><button onclick="deleteExpense(${index})" class="btn bg-red-500">Delete</button></td>
+                `;
+                expenseTable.appendChild(tr);
+            });
+        }
+
+        // Dashboard Updates
+        // Update Dashboard and Chart
+function updateDashboard() {
+    let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    let groups = JSON.parse(localStorage.getItem("groups")) || [];
+    let currentMonth = new Date().getMonth();
+    let totalExpense = 0;
+    let monthlyExpense = 0;
+    let highestSpending = 0;
+    let groupExpenses = [];
+
+    groups.forEach((group, index) => {
+        let groupTotal = 0;
+        let groupHighest = 0;
+
+        expenses.forEach(expense => {
+            if (expense.groupIndex == index) {
+                groupTotal += expense.amount;
+                if (new Date(expense.date).getMonth() === currentMonth) {
+                    monthlyExpense += expense.amount;
+                    if (expense.amount > groupHighest) {
+                        groupHighest = expense.amount;
+                    }
+                }
+            }
+        });
+
+        groupExpenses.push({ name: group.name, total: groupTotal, highest: groupHighest });
+        totalExpense += groupTotal;
+    });
+
+    document.getElementById("total-expense").textContent = totalExpense;
+    document.getElementById("monthly-expense").textContent = monthlyExpense;
+    document.getElementById("highest-spending").textContent = highestSpending;
+
+    // Display group-wise expenses
+    let groupExpensesList = document.getElementById("group-expenses-list");
+    groupExpensesList.innerHTML = "";
+    groupExpenses.forEach(group => {
+        let div = document.createElement("div");
+        div.innerHTML = `
+            <p><strong>${group.name}</strong> - Total: ₹${group.total}, Highest: ₹${group.highest}</p>
+        `;
+        groupExpensesList.appendChild(div);
+    });
+
+    // Create or Update Chart
+    if (chartInstance) {
+        // Update existing chart
+        chartInstance.data.labels = groupExpenses.map(group => group.name);
+        chartInstance.data.datasets[0].data = groupExpenses.map(group => group.total);
+        chartInstance.update(); // Update the chart
+    } else {
+        // Create a new chart if it doesn't exist yet
+        let ctx = document.getElementById("expense-chart").getContext("2d");
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: groupExpenses.map(group => group.name),
+                datasets: [{
+                    label: 'Total Expense in Current Month (₹)',
+                    data: groupExpenses.map(group => group.total),
+                    backgroundColor: '#4C8BF5',
+                    borderColor: '#2563EB',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+}
+
+// Delete Group and Related Expenses
+function deleteGroup(index) {
+    let groups = JSON.parse(localStorage.getItem("groups")) || [];
+    let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+    // Remove the group from the groups list
+    groups.splice(index, 1);
+    localStorage.setItem("groups", JSON.stringify(groups));
+
+    // Remove expenses related to this group
+    expenses = expenses.filter(expense => expense.groupIndex != index);
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+
+    // Re-index expenses to account for the group deletion
+    expenses.forEach((expense, idx) => {
+        if (expense.groupIndex > index) {
+            expense.groupIndex -= 1; // Decrease the group index if it's after the deleted group
+        }
+    });
+
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+
+    loadGroups();  // Reload groups
+    loadExpenses();  // Reload expenses
+    updateDashboard();  // Update the dashboard and chart
+}
+
+    </script>
+
+</body>
+</html>
