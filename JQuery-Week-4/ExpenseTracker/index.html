@@ -176,7 +176,7 @@
             <h1>Expense Tracker</h1>
     
             <h2>Group Management</h2>
-            <input type="text" id="group-name" placeholder="Enter Group Name">
+            <input type="text" id="group-name" placeholder="Group Name">
             <button onclick="addGroup()">Add Group</button>
             <div class="group-list-category">
                 <ul id="group-list"></ul>
@@ -217,14 +217,30 @@
 
         function addGroup() {
             let groupName = $("#group-name").val();
+            
+            // Check if group name is provided
             if (groupName) {
+                // Retrieve existing groups from localStorage, or use an empty array if not found
                 let groups = JSON.parse(localStorage.getItem("groups")) || [];
+                
+                // Check if the group already exists
+                if (groups.includes(groupName)) {
+                    alert("Group already exists!");
+                    return; // Exit the function if group already exists
+                }
+
+                // Add the new group if it's not a duplicate
                 groups.push(groupName);
                 localStorage.setItem("groups", JSON.stringify(groups));
+
+                // Clear the input field after adding the group
                 $("#group-name").val("");
-                loadGroups(); // Refresh the groups list
+
+                // Reload the groups list to reflect the new group
+                loadGroups();
             }
         }
+
 
         function loadGroups() {
             let groups = JSON.parse(localStorage.getItem("groups")) || [];
@@ -266,17 +282,17 @@
                 expenses.push({ group, name, amount, date });
                 localStorage.setItem("expenses", JSON.stringify(expenses));
 
-                loadExpenses();
+                // loadExpenses();
                 updateDashboard();
             }
         }
 
-        function loadExpenses() {
-            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-            expenses.forEach(expense => {
-                $("#expense-list").append(`<li>${expense.group}: ${expense.name} - $${expense.amount} (${expense.date})</li>`);
-            });
-        }
+        // function loadExpenses() {
+        //     let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+        //     expenses.forEach(expense => {
+        //         $("#expense-list").append(`<li>${expense.group}: ${expense.name} - $${expense.amount} (${expense.date})</li>`);
+        //     });
+        // }
 
         function updateDashboard() {
             let selectedMonth = $("#month-selector").val();
