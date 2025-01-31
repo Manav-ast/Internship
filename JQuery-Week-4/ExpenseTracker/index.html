@@ -230,11 +230,15 @@
             <!-- Wrapping the total and highest expense in separate boxes -->
             <div class="expense-boxes">
                 <div class="expense-box">
-                    <p>Total Expenses This Month:</p>
+                    <p>Lifetime Expenses:</p>
+                    <span id="lifetime-expenses">0</span>
+                </div>
+                <div class="expense-box">
+                    <p>Total This Month:</p>
                     <span id="total-expenses">0</span>
                 </div>
                 <div class="expense-box">
-                    <p>Highest Spending of the Month:</p>
+                    <p>Highest of   Month:</p>
                     <span id="highest-expense">0</span>
                 </div>
             </div>
@@ -352,14 +356,18 @@
             let selectedMonth = $("#month-selector").val();
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
+            // Calculate lifetime expenses
+            let lifetimeExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
+            $("#lifetime-expenses").text(lifetimeExpenses);
+
             // Filter expenses based on the selected month
             let filteredExpenses = expenses.filter(expense => expense.date.startsWith(selectedMonth));
 
-            // Display total expenses
+            // Display total expenses for the selected month
             let totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
             $("#total-expenses").text(totalExpenses);
 
-            // Display highest expense
+            // Display highest expense in the selected month
             let highestExpense = filteredExpenses.reduce((max, expense) => expense.amount > max ? expense.amount : max, 0);
             $("#highest-expense").text(highestExpense);
 
@@ -372,14 +380,12 @@
                 groupExpenses[expense.group].push(expense);
             });
 
-            // Display grouped expenses and total for each group on the dashboard
+            // Display grouped expenses on the dashboard
             $("#group-expenses").empty();
             for (let group in groupExpenses) {
                 let groupList = groupExpenses[group];
-                // Calculate the total for this group
                 let groupTotal = groupList.reduce((total, expense) => total + expense.amount, 0);
 
-                // Append the group name, total, and delete button
                 $("#group-expenses").append(`
                     <li>
                         <strong>${group}</strong> <b> Total: &#8377;${groupTotal}</b> 
@@ -387,7 +393,6 @@
                     </li>
                 `);
 
-                // Create an unordered list for each group's expenses
                 let groupListHtml = "<ul>";
                 groupList.forEach(expense => {
                     groupListHtml += `
@@ -400,13 +405,10 @@
                 });
                 groupListHtml += "</ul>";
 
-                // Append the expense list for each group under the group name
                 $("#group-expenses").append(groupListHtml);
             }
-
-            // Clear the expense list (only to display on the dashboard, not adding after expense)
-            $("#expense-list").empty();
         }
+
 
         function deleteExpense(group, name, amount, date) {
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
