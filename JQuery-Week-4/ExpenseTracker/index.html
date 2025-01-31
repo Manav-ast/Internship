@@ -244,6 +244,12 @@
             </div>
 
             <h3>Expenses by Group</h3>
+            <label for="sort-order">Sort By Amount:</label>
+            <select id="sort-order" onchange="updateDashboard()">
+                <option value="none">None</option>
+                <option value="asc">Lowest to Highest</option>
+                <option value="desc">Highest to Lowest</option>
+            </select>
 
             <div class="group-expenses-list">
                 <ul id="group-expenses"></ul>
@@ -354,6 +360,7 @@
 
         function updateDashboard() {
             let selectedMonth = $("#month-selector").val();
+            let sortOrder = $("#sort-order").val(); // Get selected sorting order
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
             // Calculate lifetime expenses
@@ -362,6 +369,13 @@
 
             // Filter expenses based on the selected month
             let filteredExpenses = expenses.filter(expense => expense.date.startsWith(selectedMonth));
+
+            // Sort expenses based on selected order
+            if (sortOrder === "asc") {
+                filteredExpenses.sort((a, b) => a.amount - b.amount);
+            } else if (sortOrder === "desc") {
+                filteredExpenses.sort((a, b) => b.amount - a.amount);
+            }
 
             // Display total expenses for the selected month
             let totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
