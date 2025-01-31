@@ -13,6 +13,9 @@
         body {
             font-family: 'Poppins', sans-serif;
         }
+        span{
+            font-family: 'Arial', sans-serif;
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-6">
@@ -26,7 +29,7 @@
             <input type="text" id="group-name" class="w-full p-2 mb-4 border border-gray-300 rounded" placeholder="Group Name" required>
             <button onclick="addGroup()" class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600">Add Group</button>
 
-            <div class="overflow-y-auto h-60 mt-6">
+            <div class="overflow-y-auto h-36 mt-6">
                 <ul id="group-list" class="space-y-2"></ul>
             </div>
 
@@ -51,11 +54,11 @@
                     <span id="lifetime-expenses" class="font-semibold text-lg">0</span>
                 </div>
                 <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center mb-4 sm:mb-0">
-                    <p class="text-sm">Total This Month:</p>
+                    <p class="text-sm">Total this Month:</p>
                     <span id="total-expenses" class="font-semibold text-lg">0</span>
                 </div>
                 <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center">
-                    <p class="text-sm">Highest of Month:</p>
+                    <p class="text-sm">Highest this Month:</p>
                     <span id="highest-expense" class="font-semibold text-lg">0</span>
                 </div>
             </div>
@@ -153,24 +156,24 @@
 
                 let groupHTML = `
                     <div class="mb-6">
-                        <h4 class="font-semibold text-xl">${group} (Total: &#8377;${groupTotal})</h4>
-                        <table class="min-w-full bg-gray-100 border border-gray-300 rounded-lg mt-2">
-                            <thead>
-                                <tr class="bg-green-500 text-white">
-                                    <th class="py-2 px-4 text-left">Expense Name</th>
-                                    <th class="py-2 px-4 text-left">Amount</th>
-                                    <th class="py-2 px-4 text-left">Date</th>
-                                    <th class="py-2 px-4 text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <h4 class="font-semibold text-xl">${group} (Total: <span>&#8377; </span>${groupTotal})</h4>
+                        <table class="min-w-full bg-gray-100 border border-gray-300 rounded-lg mt-2 overflow-hidden">
+                        <thead>
+                            <tr class="bg-green-500 text-white rounded-t-lg">
+                                <th class="py-2 px-4 text-left">Expense Name</th>
+                                <th class="py-2 px-4 text-left">Amount</th>
+                                <th class="py-2 px-4 text-left">Date</th>
+                                <th class="py-2 px-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="rounded-b-lg">
                 `;
 
                 groupExpenses.forEach(expense => {
                     groupHTML += `
                         <tr>
                             <td class="py-2 px-4">${expense.name}</td>
-                            <td class="py-2 px-4">&#8377;${expense.amount}</td>
+                            <td class="py-2 px-4"><span>&#8377; </span>${expense.amount}</td>
                             <td class="py-2 px-4">${expense.date}</td>
                             <td class="py-2 px-4 text-center">
                                 <button class="text-red-600" onclick="deleteExpense('${expense.group}', '${expense.name}', ${expense.amount}, '${expense.date}')">
@@ -221,14 +224,14 @@
             let selectedMonth = $("#month-selector").val();
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
             let lifetimeExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
-            $("#lifetime-expenses").text(lifetimeExpenses);
+            $("#lifetime-expenses").text("₹ " +lifetimeExpenses);
 
             let filteredExpenses = expenses.filter(expense => expense.date.startsWith(selectedMonth));
             let totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
-            $("#total-expenses").text(totalExpenses);
+            $("#total-expenses").text("₹ " +totalExpenses);
 
             let highestExpense = Math.max(...filteredExpenses.map(expense => expense.amount), 0);
-            $("#highest-expense").text(highestExpense);
+            $("#highest-expense").text("₹ " +highestExpense);
         }
     </script>
 </body>

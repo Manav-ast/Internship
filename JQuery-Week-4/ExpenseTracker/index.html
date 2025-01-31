@@ -20,6 +20,9 @@
             padding: 20px;
             scroll-behavior: smooth;
         }
+        span{
+            font-family: 'Arial', sans-serif;
+        }
         .container {
             display: flex;
             max-width: 1000px;
@@ -56,6 +59,7 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-family: 'Poppins', sans-serif !important;
         }
         button {
             background-color: rgb(40, 167, 69);
@@ -365,7 +369,7 @@
 
             // Calculate lifetime expenses
             let lifetimeExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
-            $("#lifetime-expenses").text(lifetimeExpenses);
+            $("#lifetime-expenses").text("₹ " + lifetimeExpenses);
 
             // Filter expenses based on the selected month
             let filteredExpenses = expenses.filter(expense => expense.date.startsWith(selectedMonth));
@@ -379,11 +383,11 @@
 
             // Display total expenses for the selected month
             let totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
-            $("#total-expenses").text(totalExpenses);
+            $("#total-expenses").text("₹ " +totalExpenses);
 
             // Display highest expense in the selected month
             let highestExpense = filteredExpenses.reduce((max, expense) => expense.amount > max ? expense.amount : max, 0);
-            $("#highest-expense").text(highestExpense);
+            $("#highest-expense").text("₹ "+ highestExpense);
 
             // Group expenses by group
             let groupExpenses = {};
@@ -402,7 +406,7 @@
 
                 $("#group-expenses").append(`
                     <li>
-                        <strong>${group}</strong> <b> Total: &#8377;${groupTotal}</b> 
+                        <strong>${group}</strong> <b> Total: <span>&#8377; </span>${groupTotal}</b> 
                         <button class="delete-button" onclick="deleteGroupFromDashboard('${group}')"><i class="fas fa-trash"></i></button>
                     </li>
                 `);
@@ -411,7 +415,7 @@
                 groupList.forEach(expense => {
                     groupListHtml += `
                         <li>
-                            ${expense.name} : &#8377;${expense.amount} 
+                            <p>${expense.name} : <span>&#8377; </span>${expense.amount} </p>
                             <span>(${expense.date})</span> 
                             <button class="delete-button" onclick="deleteExpense('${expense.group}', '${expense.name}', ${expense.amount}, '${expense.date}')"><i class="fas fa-trash"></i></button>
                         </li>
