@@ -5,296 +5,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Tracker</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
     <style>
-        
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-
         body {
             font-family: 'Poppins', sans-serif;
-            font-optical-sizing: auto;
-            font-style: normal;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            scroll-behavior: smooth;
         }
         span{
             font-family: 'Arial', sans-serif;
         }
-        .container {
-            display: flex;
-            max-width: 1000px;
-            /* height: 100vh; */
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Left section: Group and Expense Management */
-        .left-section {
-            flex: 1;
-            padding: 20px;
-            border-right: 2px solid #ddd;
-        }
-
-        /* Right section: Dashboard */
-        .right-section {
-            flex: 2;
-            padding: 20px;
-        }
-
-        /* Adjust headings */
-        h1,h2 {
-            text-align: center;
-            width: 100%;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: 'Poppins', sans-serif !important;
-        }
-        button {
-            background-color: rgb(40, 167, 69);
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-
-        
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background: #f1f1f1;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-        }
-        /* Delete button styles */
-        button.delete-button {
-            padding: 4px 8px;
-            font-size: 14px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #d9534f; /* Red color */
-        }
-        button.delete-button i {
-            font-size: 16px; /* Icon size */
-        }
-        button.delete-button:hover {
-            color: #c9302c; /* Darker red color on hover */
-        }
-        #expense-name, #expense-amount, #expense-date, #group-name {
-            width: 18rem;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #group-list > li{
-            background: #f1f1f1;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-        }
-
-        ul > li{
-            background: #f1f1f1;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            align-items: center;
-        }
-
-        #group-list >li > .delete-button{
-            margin-left: 3rem;
-        }
-
-        #group-list >li{
-            padding-left: 1.5rem;
-            background-color: #f1f1f1;
-        }
-        #group-expenses > li > .delete-button{
-            margin-left: 4.2rem;
-        }
-        #group-expenses > ul >li > .delete-button{
-            margin-left: 4rem;
-        }
-        #group-expenses >li > strong {
-            margin-left: 1rem;
-        }
-        #group-expenses > ul > li {
-            padding-left: 1.5rem;
-        }
-        .right-section > input{
-            padding-right: 1rem;
-            width: 18rem;
-        }
-
-        .group-list-category{
-            height: 20vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        .group-expenses-list{
-            height: 67vh;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        /*====================== Scroll Bar =====================*/
-
-        ::-webkit-scrollbar {
-            width: 0.6rem;
-            border-radius: 0.5rem;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            /* background-color: var(--scroll-thumb-color); */
-            border-radius: 0.5rem;
-        }
-
-        .expense-boxes {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .expense-box {
-            flex: 1;
-            background-color: #f1f1f1;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .expense-box p {
-            margin: 0;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .expense-box span {
-            font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
-        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Left Section -->
-        <div class="left-section">
-            <h1>Expense Tracker</h1>
-    
-            <h2>Group Management</h2>
-            <input type="text" id="group-name" placeholder="Group Name" required>
-            <button onclick="addGroup()">Add Group</button>
-            <div class="group-list-category">
-                <ul id="group-list"></ul>
-            </div>
-    
-            <h2>Expense Management</h2>
-            <select id="expense-group"></select>
-            <input type="text" id="expense-name" placeholder="Expense Name" required>
-            <input type="number" id="expense-amount" placeholder="Amount" required>
-            <input type="date" id="expense-date" required>
-            <button onclick="addExpense()">Add Expense</button>
-        </div>
-    
-        <!-- Right Section -->
-        <div class="right-section">
-            <h2>Dashboard</h2>  
-            <label for="month-selector">Select Month:</label>
-            <input type="month" id="month-selector" onchange="updateDashboard()">
+<body class="bg-gray-100 p-6">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg flex flex-col md:flex-row">
+        <!-- Left Section (Smaller) -->
+        <div class="w-full md:w-1/4 p-4 border-r-2 border-gray-200">
+            <h1 class="text-3xl font-semibold text-center mb-6">Expense Tracker</h1>
             
-            <!-- Wrapping the total and highest expense in separate boxes -->
-            <div class="expense-boxes">
-                <div class="expense-box">
-                    <p>Lifetime Expenses:</p>
-                    <span id="lifetime-expenses">0</span>
-                </div>
-                <div class="expense-box">
-                    <p>Total This Month:</p>
-                    <span id="total-expenses">0</span>
-                </div>
-                <div class="expense-box">
-                    <p>Highest of   Month:</p>
-                    <span id="highest-expense">0</span>
-                </div>
+            <!-- Group Management -->
+            <h2 class="text-xl text-center mb-4">Group Management</h2>
+            <form id="group-form">
+                <input type="text" id="group-name" class="w-full p-2 mb-4 border border-gray-300 rounded" placeholder="Group Name">
+                <button type="submit" class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600">Add Group</button>
+            </form>
+
+            <div class="overflow-y-auto h-36 mt-6">
+                <ul id="group-list" class="space-y-2"></ul>
             </div>
 
-            <h3>Expenses by Group</h3>
-            <label for="sort-order">Sort By Amount:</label>
-            <select id="sort-order" onchange="updateDashboard()">
-                <option value="none">None</option>
-                <option value="asc">Lowest to Highest</option>
-                <option value="desc">Highest to Lowest</option>
-            </select>
+            <!-- Expense Management -->
+            <h2 class="text-xl text-center mt-6 mb-4">Expense Management</h2>
+            <form id="expense-form">
+                <select id="expense-group" class="w-full p-2 mb-4 border border-gray-300 rounded"></select>
+                <input type="text" id="expense-name" class="w-full p-2 mb-4 border border-gray-300 rounded" placeholder="Expense Name">
+                <input type="number" id="expense-amount" class="w-full p-2 mb-4 border border-gray-300 rounded" placeholder="Amount">
+                <input type="date" id="expense-date" class="w-full p-2 mb-4 border border-gray-300 rounded">
+                <button type="submit" class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600">Add Expense</button>
+            </form>
+        </div>
 
-            <div class="group-expenses-list">
-                <ul id="group-expenses"></ul>
+        <!-- Right Section -->
+        <div class="flex-1 sm:w-full md:w-3/4 p-4">
+            <h2 class="text-xl font-semibold text-center mb-6">Dashboard</h2>  
+            <label for="month-selector" class="block text-sm font-medium mb-2">Select Month:</label>
+            <input type="month" id="month-selector" class="w-full p-2 border border-gray-300 rounded mb-6" onchange="updateDashboard()">
+            
+            <div class="flex flex-col sm:flex-row sm:space-x-4 mb-6">
+                <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center mb-4 sm:mb-0">
+                    <p class="text-sm">Lifetime Expenses:</p>
+                    <span id="lifetime-expenses" class="font-semibold text-lg">0</span>
+                </div>
+                <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center mb-4 sm:mb-0">
+                    <p class="text-sm">Total this Month:</p>
+                    <span id="total-expenses" class="font-semibold text-lg">0</span>
+                </div>
+                <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center">
+                    <p class="text-sm">Highest this Month:</p>
+                    <span id="highest-expense" class="font-semibold text-lg">0</span>
+                </div>
+            </div>
+            
+            <h3 class="text-lg font-semibold mb-4">Expenses by Group</h3>
+
+            <!-- Expenses Table -->
+            <div class="overflow-x-auto">
+                <div id="group-expenses-container"></div>
             </div>
         </div>
     </div>
-    
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
             loadGroups();
             loadExpenses();
             updateDashboard();
+
+            let today = new Date().toISOString().split('T')[0];
+            $("#expense-date").val(today);
+            
+            $("#month-selector").on("change", function() {
+                loadExpenses();
+                updateDashboard();
+            });
+
+            $("#group-name").focus(function() {
+                $(this).next("p.text-red-500").remove();
+            });
+
+            $("#expense-group").focus(function() {
+                $(this).next("p.text-red-500").remove();
+            });
+
+            $("#expense-name").focus(function() {
+                $(this).next("p.text-red-500").remove();
+            });
+
+            $("#expense-amount").focus(function() {
+                $(this).next("p.text-red-500").remove();
+            });
+
+            $("#expense-date").focus(function() {
+                $(this).next("p.text-red-500").remove();
+            });
+            // Add jQuery Validation for the group form
+            $("#group-form").validate({
+                rules: {
+                    groupName: {
+                        required: true,
+                        minlength: 3
+                    }
+                },
+                messages: {
+                    groupName: {
+                        required: "Please enter a group name",
+                        minlength: "Group name must be at least 3 characters long"
+                    }
+                },
+                submitHandler: function(form) {
+                    let groupName = $("#group-name").val();
+                    addGroup(groupName);  // Only call this if the form is valid
+                    form.reset();  // Reset the form only if the submission is valid
+                },
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element);  // Display errors below respective input fields
+                }
+            });
+
+            // Add jQuery Validation for the expense form
+            $("#expense-form").validate({
+                rules: {
+                    expenseGroup: {
+                        required: true
+                    },
+                    expenseName: {
+                        required: true
+                    },
+                    expenseAmount: {
+                        required: true,
+                        number: true,
+                        min: 0
+                    },
+                    expenseDate: {
+                        required: true
+                    }
+                },
+                messages: {
+                    expenseGroup: "Please select a group",
+                    expenseName: "Please enter an expense name",
+                    expenseAmount: {
+                        required: "Please enter an amount",
+                        number: "Amount must be a valid number",
+                        min: "Amount cannot be negative"
+                    },
+                    expenseDate: "Please select a date"
+                },
+                submitHandler: function(form) {
+                    let expenseGroup = $("#expense-group").val();
+                    let expenseName = $("#expense-name").val();
+                    let expenseAmount = parseFloat($("#expense-amount").val());
+                    let expenseDate = $("#expense-date").val();
+
+                    addExpense(expenseGroup, expenseName, expenseAmount, expenseDate);
+
+                    form.reset(); // Reset the form after submission
+                    
+                    // Set default date to today after resetting
+                    let today = new Date().toISOString().split('T')[0];
+                    $("#expense-date").val(today);
+                },
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element);  // Display errors below respective input fields
+                }
+            });
         });
 
-        function addGroup() {
-            let groupName = $("#group-name").val();
-            
-            // Check if group name is provided
+        function addGroup(groupName) {
+            // Clear any previous error messages
+            $("#group-name").next("p.text-red-500").remove();
+
             if (groupName) {
-                // Retrieve existing groups from localStorage, or use an empty array if not found
                 let groups = JSON.parse(localStorage.getItem("groups")) || [];
-                
-                // Check if the group already exists
-                if (groups.includes(groupName)) {
-                    alert("Group already exists!");
-                    return; // Exit the function if group already exists
+                if (!groups.includes(groupName)) {
+                    groups.push(groupName);
+                    localStorage.setItem("groups", JSON.stringify(groups));
+                    loadGroups();  // Reload groups to update the group list in the UI
+                } else {
+                    // Show error message below the group name field in red
+                    $("#group-name").after('<p class="text-red-500 text-sm mt-1">Group already exists!</p>');
                 }
-
-                // Add the new group if it's not a duplicate
-                groups.push(groupName);
-                localStorage.setItem("groups", JSON.stringify(groups));
-
-                // Clear the input field after adding the group
-                $("#group-name").val("");
-
-                // Reload the groups list to reflect the new group
-                loadGroups();
+            } else {
+                // Show error message if the group name is empty
+                $("#group-name").after('<p class="text-red-500 text-sm mt-1">Group name cannot be empty.</p>');
             }
         }
+
+        function addExpense(group, name, amount, date) {
+            // Clear any previous error messages
+            $("#expense-group").next("p.text-red-500").remove();
+            $("#expense-name").next("p.text-red-500").remove();
+            $("#expense-amount").next("p.text-red-500").remove();
+            $("#expense-date").next("p.text-red-500").remove();
+
+            let errorFlag = false;
+
+            if (!group) {
+                $("#expense-group").after('<p class="text-red-500 text-sm mt-1">Please select a group.</p>');
+                errorFlag = true;
+            }
+
+            if (!name) {
+                $("#expense-name").after('<p class="text-red-500 text-sm mt-1">Please enter an expense name.</p>');
+                errorFlag = true;
+            }
+
+            if (amount < 0 || isNaN(amount)) {
+                $("#expense-amount").after('<p class="text-red-500 text-sm mt-1">Amount must be a valid positive number.</p>');
+                errorFlag = true;
+            }
+
+            if (!date) {
+                $("#expense-date").after('<p class="text-red-500 text-sm mt-1">Please select a date.</p>');
+                errorFlag = true;
+            }
+
+            if (!errorFlag) {
+                let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+                let isDuplicate = expenses.some(expense => expense.group === group && expense.name === name && expense.amount === amount && expense.date === date);
+
+                if (!isDuplicate) {
+                    expenses.push({ group, name, amount, date });
+                    localStorage.setItem("expenses", JSON.stringify(expenses));
+                    loadExpenses();  // Reload expenses to update the expense list in the UI
+                    updateDashboard();  // Update the dashboard after adding the expense
+                } else {
+                    // Show error message if the expense already exists
+                    $("#expense-name").after('<p class="text-red-500 text-sm mt-1">This expense is already added.</p>');
+                }
+            }
+        }
+
 
         function loadGroups() {
             let groups = JSON.parse(localStorage.getItem("groups")) || [];
@@ -302,175 +255,123 @@
             $("#expense-group").empty();
             groups.forEach(group => {
                 $("#group-list").append(`
-                    <li>${group} 
-                        <button class="delete-button" onclick="deleteGroupFromManagement('${group}')"><i class="fas fa-trash"></i></button>
+                    <li class="flex justify-between items-center p-2 bg-gray-100 rounded">
+                        ${group}
+                        <button class="delete-button text-red-600" onclick="deleteGroupFromManagement('${group}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </li>
                 `);
                 $("#expense-group").append(`<option value="${group}">${group}</option>`);
             });
         }
 
-        function addExpense() {
-            let group = $("#expense-group").val();
-            let name = $("#expense-name").val();
-            let amount = parseFloat($("#expense-amount").val());
-            let date = $("#expense-date").val();
-
-
-             // Validate Expense Name: Only letters and spaces
-             let nameRegex = /^[A-Za-z\s]+$/;
-            if (!name || !nameRegex.test(name)) {
-                alert("Expense name must contain only letters and spaces.");
-                return;
-            }
-
-            if (group && name && amount && date) {
-                let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-                // Check for duplicate entry
-                let isDuplicate = expenses.some(expense => 
-                    expense.group === group &&
-                    expense.name === name &&
-                    expense.amount === amount &&
-                    expense.date === date
-                );
-
-                if (isDuplicate) {
-                    alert("This expense is already added.");
-                    return;
-                }
-
-                // Add expense if not duplicate
-                expenses.push({ group, name, amount, date });
-                localStorage.setItem("expenses", JSON.stringify(expenses));
-
-                // Clear the input fields after adding the expense
-                $("#expense-name").val("");
-                $("#expense-amount").val("");
-                $("#expense-date").val("");
-
-
-                loadExpenses();
-                updateDashboard();
-            }
-        }
-
         function loadExpenses() {
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-            expenses.forEach(expense => {
-                $("#expense-list").append(`<li>${expense.group}: ${expense.name} - $${expense.amount} (${expense.date})</li>`);
-            });
-        }
-
-        function updateDashboard() {
             let selectedMonth = $("#month-selector").val();
-            let sortOrder = $("#sort-order").val(); // Get selected sorting order
-            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-            // Calculate lifetime expenses
-            let lifetimeExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
-            $("#lifetime-expenses").text("₹ " + lifetimeExpenses);
+            let groupedExpenses = {};
 
-            // Filter expenses based on the selected month
-            let filteredExpenses = expenses.filter(expense => expense.date.startsWith(selectedMonth));
+            // Filter expenses by selected month
+            let filteredExpenses = selectedMonth 
+                ? expenses.filter(expense => expense.date.startsWith(selectedMonth)) 
+                : expenses;
 
-            // Sort expenses based on selected order
-            if (sortOrder === "asc") {
-                filteredExpenses.sort((a, b) => a.amount - b.amount);
-            } else if (sortOrder === "desc") {
-                filteredExpenses.sort((a, b) => b.amount - a.amount);
-            }
-
-            // Display total expenses for the selected month
-            let totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
-            $("#total-expenses").text("₹ " +totalExpenses);
-
-            // Display highest expense in the selected month
-            let highestExpense = filteredExpenses.reduce((max, expense) => expense.amount > max ? expense.amount : max, 0);
-            $("#highest-expense").text("₹ "+ highestExpense);
-
-            // Group expenses by group
-            let groupExpenses = {};
+            // Group filtered expenses by group name
             filteredExpenses.forEach(expense => {
-                if (!groupExpenses[expense.group]) {
-                    groupExpenses[expense.group] = [];
+                if (!groupedExpenses[expense.group]) {
+                    groupedExpenses[expense.group] = [];
                 }
-                groupExpenses[expense.group].push(expense);
+                groupedExpenses[expense.group].push(expense);
             });
 
-            // Display grouped expenses on the dashboard
-            $("#group-expenses").empty();
-            for (let group in groupExpenses) {
-                let groupList = groupExpenses[group];
-                let groupTotal = groupList.reduce((total, expense) => total + expense.amount, 0);
+            // Clear previous content
+            $("#group-expenses-container").empty();
 
-                $("#group-expenses").append(`
-                    <li>
-                        <strong>${group}</strong> <b> Total: <span>&#8377; </span>${groupTotal}</b> 
-                        <button class="delete-button" onclick="deleteGroupFromDashboard('${group}')"><i class="fas fa-trash"></i></button>
-                    </li>
-                `);
+            // Display grouped expenses with totals
+            for (let group in groupedExpenses) {
+                let groupExpenses = groupedExpenses[group];
+                let groupTotal = groupExpenses.reduce((total, expense) => total + expense.amount, 0);
 
-                let groupListHtml = "<ul>";
-                groupList.forEach(expense => {
-                    groupListHtml += `
-                        <li>
-                            <p>${expense.name} : <span>&#8377; </span>${expense.amount} </p>
-                            <span>(${expense.date})</span> 
-                            <button class="delete-button" onclick="deleteExpense('${expense.group}', '${expense.name}', ${expense.amount}, '${expense.date}')"><i class="fas fa-trash"></i></button>
-                        </li>
+                let groupHTML = `
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-xl">${group} (Total: <span>&#8377; </span>${groupTotal})</h4>
+                        <table class="min-w-full bg-gray-100 border border-gray-300 rounded-lg mt-2 overflow-hidden">
+                        <thead>
+                            <tr class="bg-green-500 text-white rounded-t-lg">
+                                <th class="py-2 px-4 text-left">Expense Name</th>
+                                <th class="py-2 px-4 text-left">Amount</th>
+                                <th class="py-2 px-4 text-left">Date</th>
+                                <th class="py-2 px-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="rounded-b-lg">
+                `;
+
+                groupExpenses.forEach(expense => {
+                    groupHTML += `
+                        <tr>
+                            <td class="py-2 px-4">${expense.name}</td>
+                            <td class="py-2 px-4"><span>&#8377; </span>${expense.amount}</td>
+                            <td class="py-2 px-4">${expense.date}</td>
+                            <td class="py-2 px-4 text-center">
+                                <button class="text-red-600" onclick="deleteExpense('${expense.group}', '${expense.name}', ${expense.amount}, '${expense.date}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                     `;
                 });
-                groupListHtml += "</ul>";
 
-                $("#group-expenses").append(groupListHtml);
+                groupHTML += `
+                        </tbody>
+                    </table>
+                </div>
+                `;
+
+                $("#group-expenses-container").append(groupHTML);
             }
         }
 
 
         function deleteExpense(group, name, amount, date) {
-            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-            // Filter out the expense to delete
-            expenses = expenses.filter(expense => 
-                !(expense.group === group && expense.name === name && expense.amount === amount && expense.date === date)
-            );
-
-            // Update localStorage and refresh the dashboard
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-            updateDashboard();
-        }
-
-        function deleteGroupFromDashboard(group) {
-            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-
-            // Filter out the expenses for the group to delete from the dashboard view
-            expenses = expenses.filter(expense => expense.group !== group);
-
-            // Update the expenses in localStorage
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-
-            // Refresh the dashboard (group will not be displayed anymore)
-            updateDashboard();
+            if (confirm("Are you sure you want to delete this expense?")) {
+                let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+                expenses = expenses.filter(expense => !(expense.group === group && expense.name === name && expense.amount === amount && expense.date === date));
+                localStorage.setItem("expenses", JSON.stringify(expenses));
+                loadExpenses();
+                updateDashboard();
+            }
         }
 
         function deleteGroupFromManagement(group) {
+            if (confirm("Are you sure you want to delete this group? This will also remove all associated expenses.")) {
+                let groups = JSON.parse(localStorage.getItem("groups")) || [];
+                groups = groups.filter(existingGroup => existingGroup !== group);
+                localStorage.setItem("groups", JSON.stringify(groups));
+                
+                let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+                expenses = expenses.filter(expense => expense.group !== group);
+                localStorage.setItem("expenses", JSON.stringify(expenses));
+
+                loadGroups();
+                loadExpenses();
+                updateDashboard();
+            }
+        }
+
+        function updateDashboard() {
+            let selectedMonth = $("#month-selector").val();
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+            let lifetimeExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
+            $("#lifetime-expenses").text("₹ " +lifetimeExpenses);
 
-            // Filter out the expenses for the group to delete
-            expenses = expenses.filter(expense => expense.group !== group);
+            let filteredExpenses = expenses.filter(expense => expense.date.startsWith(selectedMonth));
+            let totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
+            $("#total-expenses").text("₹ " +totalExpenses);
 
-            // Also remove the group from the groups list in localStorage
-            let groups = JSON.parse(localStorage.getItem("groups")) || [];
-            groups = groups.filter(existingGroup => existingGroup !== group);
-
-            // Update localStorage and refresh the group list
-            localStorage.setItem("expenses", JSON.stringify(expenses));
-            localStorage.setItem("groups", JSON.stringify(groups));
-
-            // Reload the groups list to remove the deleted group from the UI
-            loadGroups();
-            updateDashboard();
+            let highestExpense = Math.max(...filteredExpenses.map(expense => expense.amount), 0);
+            $("#highest-expense").text("₹ " +highestExpense);
         }
     </script>
 </body>
