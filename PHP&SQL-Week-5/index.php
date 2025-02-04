@@ -197,10 +197,485 @@
         // }
     ?>
     <?php  
-        for ($x = 0; $x <= 10; $x++) {
-        if ($x == 3) continue;
-            echo "The number is: $x <br>";
-        }
+        // for ($x = 0; $x <= 10; $x++) {
+        // if ($x == 3) continue;
+        //     echo "The number is: $x <br>";
+        // }
+
+        // $colors = array("red", "green", "blue", "yellow");
+
+        // foreach ($colors as $x) {
+        //     echo "$x <br>";
+        // }
+
+        // $members = array("Peter"=>"35", "Ben"=>"37", "Joe"=>"43");
+
+        // foreach ($members as $x => $y) {
+        //     echo "$x : $y <br>";
+        // }
+
+        // class Car {
+        //     public $color;
+        //     public $model;
+        //     public function __construct($color, $model) {
+        //       $this->color = $color;
+        //       $this->model = $model;
+        //     }
+        //   }
+          
+        // $myCar = new Car("red", "Volvo");
+          
+        // foreach ($myCar as $x => $y) {
+        //     echo "$x: $y <br>";
+        // }
+        
     ?>  
+    <?php
+        // function familyName($fname) {
+        //     echo "$fname Refsnes.<br>";
+        // }
+
+        // familyName("Jani");
+        // familyName("Hege");
+        // familyName("Stale");
+        // familyName("Kai Jim");
+        // familyName("Borge");
+
+        // function familyName($fname, $year){
+        //     echo "$fname Refsnes. Born in $year.<br>";
+        // }
+
+        // familyName("Hege", 1975);
+        // familyName("Stale", 1990);
+        // familyName("Kai", 1985);
+        // function sum($x, $y) {
+        //     $z = $x + $y;
+        //     return $z;
+        //   }
+          
+        //   echo "5 + 10 = " . sum(5, 10) . "<br>";
+        //   echo "7 + 13 = " . sum(7, 13) . "<br>";
+        //   echo "2 + 4 = " . sum(2, 4);
+
+        // function add_five(&$value) {
+        //     $value += 5;
+        //   }
+          
+        //   $num = 2;
+        //   add_five($num);
+        //   echo $num;
+
+        // function sumMyNumbers(...$x) {
+        //     $n = 0;
+        //     $len = count($x);
+        //     for($i = 0; $i < $len; $i++) {
+        //       $n += $x[$i];
+        //     }
+        //     return $n;
+        //   }
+          
+        //   $a = sumMyNumbers(5, 2, 6, 2, 7, 7);
+        //   echo $a;
+        
+        // function myFunction() {
+        //     echo "I come from a function!";
+        // }
+          
+        // $myArr = array("car" => "Volvo", "age" => 15, "message" => myFunction);
+          
+        // $myArr["message"]();
+
+        // $cars = array("Volvo", "BMW", "Toyota");
+        // rsort($cars);
+        // // var_dump($cars);
+        // $age = array("Peter"=>"35", "Ben"=>"37", "Joe"=>"43");
+        // krsort($age);
+        // var_dump($age);
+
+        // $x = 15;
+        // function global_test() {
+        //     echo $GLOBALS['x'] = 20;
+        // }
+
+        // global_test();
+    ?>
+
+    <!-- <form action="" method="GET">
+        Name: <input type="text" name="name" value="<?php //echo $name;?>">
+
+        E-mail: <input type="text" name="email" value="<?php //echo $email;?>">
+
+        Website: <input type="text" name="website" value="<?php //echo $website;?>">
+
+        Comment: <textarea name="comment" rows="5" cols="40"><?php //echo $comment;?></textarea>
+
+        Gender:
+        <input type="radio" name="gender"
+        <?php //if (isset($gender) && $gender=="female") echo "checked";?>
+        value="female">Female
+        <input type="radio" name="gender"
+        <?php //if (isset($gender) && $gender=="male") echo "checked";?>
+        value="male">Male
+        <input type="radio" name="gender"
+        <?php //if (isset($gender) && $gender=="other") echo "checked";?>
+        value="other">Other
+    </form> -->
+    <?php
+        // date_default_timezone_set("Asia/Kolkata");
+        // echo "Today is " . date("Y/m/d") . "<br>";
+        // echo "Today is " . date("Y.m.d") . "<br>";
+        // echo "Today is " . date("Y-m-d") . "<br>";
+        // echo "Today is " . date("l") . "<br>";
+        // echo "Time is " . date("h:i:sa") . "<br>";
+        // echo "Time is " . date("H:i:s") . "<br>";
+        // $d=strtotime("10:30pm April 15 2014");
+        // echo "Created date is " . date("Y-m-d h:i:sa", $d) . "<br>";
+
+        // $d=strtotime("tomorrow");
+        // echo date("d-m-Y h:i:sa", $d) . "<br>";
+
+        // $d=strtotime("next Saturday");
+        // echo date("Y-m-d h:i:sa", $d) . "<br>";
+
+        // $d=strtotime("+3 Months");
+        // echo date("Y-m-d h:i:sa", $d) . "<br>";
+
+        // $startdate = strtotime("Saturday");
+        // $enddate = strtotime("+6 weeks", $startdate);
+
+        // while ($startdate < $enddate) {
+        // echo date("M d", $startdate) . "<br>";
+        // $startdate = strtotime("+1 week", $startdate);
+        // }
+    ?>
+    <!-- <h1>Welcome to my home page!</h1>
+    <p>Some text.</p>
+    <p>Some more text.</p> -->
+    <?php //include 'action.php';?>
+
+    <?php 
+        // $myfile = fopen("test.txt", "r") or die("Unable to open file!");
+        // echo fread($myfile,filesize("test.txt"));
+        // fclose($myfile);
+        // echo fread($myfile, filesize('test.txt'));
+        // $myfile = fopen("test.txt", "r") or die("Unable to open file!");
+        // // Output one line until end-of-file
+        // while(!feof($myfile)) {
+        //     echo fgetc($myfile) . "<br>";
+        // }
+        // fclose($myfile);
+
+        // $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        // $txt = "John Doe\n";
+        // fwrite($myfile, $txt);
+        // $txt = "Manav Vaishnani\n";
+        // fwrite($myfile, $txt);
+        // fclose($myfile);
+    ?>
+
+
+    <!-- <form action="action.php" method="GET">
+        Name:<input type="text" name="name"> 
+        Message:<textarea name="message" rows="4" cols="50"></textarea>
+        <input type="submit">
+    </form> -->
+
+    <?php
+// class Fruit {
+//   // Properties
+//   public $name;
+//   public $color;
+
+//   // Methods
+//   function set_name($name) {
+//     $this->name = $name;
+//   }
+//   function get_name() {
+//     return $this->name;
+//   }
+// }
+
+// $apple = new Fruit();
+// $banana = new Fruit();
+// $apple->set_name('Apple');
+// $banana->set_name('Banana');
+
+// echo $apple->get_name();
+// echo "<br>";
+// echo $banana->get_name();
+
+// class Fruit {
+//     // Properties
+//     public $name;
+//     public $color;
+  
+//     // Methods
+//     function set_name($name) {
+//       $this->name = $name;
+//     }
+//     function get_name() {
+//       return $this->name;
+//     }
+//     function set_color($color) {
+//       $this->color = $color;
+//     }
+//     function get_color() {
+//       return $this->color;
+//     }
+//   }
+  
+//   $apple = new Fruit();
+//   $banana = new Fruit();
+//   $apple->set_name('Apple');
+//   $apple->set_color('Red');
+
+//   $banana->set_name('Banana');
+//   $banana->set_color('Yellow');
+
+//   echo "Name: " . $apple->get_name();
+//   echo "<br>";
+//   echo "Color: " . $apple->get_color();
+//   echo "<br>";
+//   echo "Name: ". $banana->get_name();
+//   echo "<br>";
+//   echo "Color: ". $banana->get_color();
+//   echo "<br>";
+//   $apple = new Fruit();
+//   var_dump($apple instanceof Fruit);
+// class Fruit {
+//   public $name;
+//   public $color;
+
+//   function __construct($name, $color) {
+//     $this->name = $name;
+//     $this->color = $color;
+//   }
+
+//   function get_name() {
+//     return $this->name;
+//   }
+//   function __destruct()
+//   {
+//     echo "Object ". $this->name. " destroyed";
+//   }
+// }
+
+// $apple = new Fruit("Apple", "red");
+?>
+
+<?php
+// class Fruit {
+//   public $name;
+//   protected $color;
+//   private $weight;
+// }
+
+// $mango = new Fruit();
+// $mango->name = 'Mango'; // OK
+// $mango->color = 'Yellow'; // ERROR
+// $mango->weight = '300'; // ERROR
+
+// class Fruit {
+//   public $name;
+//   public $color;
+//   public $weight;
+
+//   function set_name($n) {  // a public function (default)
+//     $this->name = $n;
+//   }
+//   protected function set_color($n) { // a protected function
+//     $this->color = $n;
+//   }
+//   private function set_weight($n) { // a private function
+//     $this->weight = $n;
+//   }
+// }
+
+// $mango = new Fruit();
+// $mango->set_name('Mango'); // OK
+// $mango->set_color('Yellow'); // ERROR
+// $mango->set_weight('300'); // ERROR
+
+
+// class Fruit {
+//   public $name;
+//   public $color;
+//   public function __construct($name, $color) {
+//     $this->name = $name;
+//     $this->color = $color;
+//   }
+//   public function intro() {
+//     echo "The fruit is {$this->name} and the color is {$this->color}.";
+//   }
+// }
+
+// // Strawberry is inherited from Fruit
+// class Strawberry extends Fruit {
+//   public function message() {
+//     echo "Am I a fruit or a berry? ";
+//   }
+// }
+// $strawberry = new Strawberry("Strawberry", "red");
+// $strawberry->message();
+// $strawberry->intro();
+
+?>
+
+
+<?php
+// class Goodbye {
+//   const LEAVING_MESSAGE = "Thank you for visiting W3Schools.com!";
+//   public function byebye() {
+//     echo self::LEAVING_MESSAGE;
+//   }
+// }
+
+// $goodbye = new Goodbye();
+// $goodbye->byebye();
+?>
+
+
+<?php
+// Parent class
+// abstract class Car {
+//   public $name;
+//   public function __construct($name) {
+//     $this->name = $name;
+//   }
+//   abstract public function intro() : string;
+// }
+
+// // Child classes
+// class Audi extends Car {
+//   public function intro() : string {
+//     return "Choose German quality! I'm an $this->name!";
+//   }
+// }
+
+// class Volvo extends Car {
+//   public function intro() : string {
+//     return "Proud to be Swedish! I'm a $this->name!";
+//   }
+// }
+
+// class Citroen extends Car {
+//   public function intro() : string {
+//     return "French extravagance! I'm a $this->name!";
+//   }
+// }
+
+// // Create objects from the child classes
+// $audi = new audi("Audi");
+// echo $audi->intro();
+// echo "<br>";
+
+// $volvo = new volvo("Volvo");
+// echo $volvo->intro();
+// echo "<br>";
+
+// $citroen = new citroen("Citroen");
+// echo $citroen->intro();
+?>
+
+<?php
+// Interface definition
+// interface Animal {
+//   public function makeSound();
+// }
+
+// // Class definitions
+// class Cat implements Animal {
+//   public function makeSound() {
+//     echo " Meow ";
+//   }
+// }
+
+// class Dog implements Animal {
+//   public function makeSound() {
+//     echo " Bark ";
+//   }
+// }
+
+// class Mouse implements Animal {
+//   public function makeSound() {
+//     echo " Squeak ";
+//   }
+// }
+
+// // Create a list of animals
+// $cat = new Cat();
+// $dog = new Dog();
+// $mouse = new Mouse();
+// $animals = array($cat, $dog, $mouse);
+
+// // Tell the animals to make a sound
+// foreach($animals as $animal) {
+//   $animal->makeSound() ;
+//   echo "<br>";
+// }
+?>
+
+<?php
+// trait message1 {
+// public function msg1() {
+//     echo "OOP is fun! ";
+//   }
+// }
+
+// class Welcome {
+//   use message1;
+// }
+
+// $obj = new Welcome();
+// $obj->msg1();
+
+trait message1 {
+    public function msg1() {
+      echo "OOP is fun! ";
+    }
+  }
+  
+  trait message2 {
+    public function msg2() {
+      echo "OOP reduces code duplication!";
+    }
+  }
+  
+  class Welcome {
+    use message1;
+  }
+  
+  class Welcome2 {
+    use message1, message2;
+  }
+  
+  $obj = new Welcome();
+  $obj->msg1();
+  echo "<br>";
+  
+  $obj2 = new Welcome2();
+  $obj2->msg1();
+  $obj2->msg2();
+  echo "<br>";
+  echo "<br>";
+?>
+
+<?php
+class domain {
+  protected static function getWebsiteName() {
+    return "Manav Vaishanani.com";
+  }
+}
+
+class domainW3 extends domain {
+  public $websiteName;
+  public function __construct() {
+    $this->websiteName = parent::getWebsiteName();
+  }
+}
+
+$domainW3 = new domainW3;
+echo $domainW3 -> websiteName;
+?>
 </body>
 </html>
