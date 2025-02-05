@@ -66,11 +66,28 @@
                     <span id="highest-expense" class="font-semibold text-lg">0</span>
                 </div>
             </div>
+
+            <!-- Real-time Search -->
+            <label for="search" class="block text-sm font-medium mb-2">Search by Group or Expense Name:</label>
+            <input type="text" id="search" class="w-full p-2 border border-gray-300 rounded mb-6" placeholder="Search...">
+
+            <!-- Sort by name and group -->
+            <div class="flex flex-wrap justify-center gap-4 mt-4">
+                <!-- Sort by Name Button -->
+                <button id="sort-name" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full sm:w-auto">
+                    Sort by Name
+                </button>
+                <!-- Sort by Amount Button -->
+                <button id="sort-amount" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full sm:w-auto">
+                    Sort by Amount
+                </button>
+            </div>
             
-            <h3 class="text-lg font-semibold mb-4">Expenses by Group</h3>
+
+            <h3 class="text-lg font-semibold mt-8 mb-4">Expenses by Group</h3>
 
             <!-- Expenses Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto mt-4 max-h-72">
                 <div id="group-expenses-container"></div>
             </div>
 
@@ -95,6 +112,21 @@
             loadGroups();
             loadExpenses();
             updateDashboard();
+
+            // Real-time search
+            $("#search").on("input", function() {
+                loadExpenses();
+            });
+
+            // Sort by Name
+            $("#sort-name").on("click", function() {
+                sortExpenses("name");
+            });
+
+            // Sort by Amount
+            $("#sort-amount").on("click", function() {
+                sortExpenses("amount");
+            });
 
             let deleteTarget = null;
 
@@ -281,18 +313,45 @@
         }
 
         function loadExpenses() {
+            const filteredExpenses = filterExpenses();
+            displayGroupedExpenses(filteredExpenses);
+        }
+
+        function sortExpenses(criteria) {
+            let filteredExpenses = filterExpenses();
+
+            // Sort based on criteria
+            if (criteria === "name") {
+                filteredExpenses.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (criteria === "amount") {
+                filteredExpenses.sort((a, b) => a.amount - b.amount);
+            }
+
+            // Re-render the expenses with the sorted list
+            displayGroupedExpenses(filteredExpenses);
+        }
+
+        function filterExpenses() {
             let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
             let selectedMonth = $("#month-selector").val();
+            let searchQuery = $("#search").val().toLowerCase();
 
-            let groupedExpenses = {};
-
-            // Filter expenses by selected month
+            // Filter expenses by selected month and search query for both group and name
             let filteredExpenses = selectedMonth 
                 ? expenses.filter(expense => expense.date.startsWith(selectedMonth)) 
                 : expenses;
 
+            return filteredExpenses.filter(expense => 
+                expense.group.toLowerCase().includes(searchQuery) || 
+                expense.name.toLowerCase().includes(searchQuery)
+            );
+        }
+
+        function displayGroupedExpenses(expenses) {
+            let groupedExpenses = {};
+
             // Group filtered expenses by group name
-            filteredExpenses.forEach(expense => {
+            expenses.forEach(expense => {
                 if (!groupedExpenses[expense.group]) {
                     groupedExpenses[expense.group] = [];
                 }
@@ -367,6 +426,7 @@
                     expenses = expenses.filter(expense => !(expense.group === deleteTarget.group && expense.name === deleteTarget.name && expense.amount === deleteTarget.amount && expense.date === deleteTarget.date));
                     localStorage.setItem("expenses", JSON.stringify(expenses));
                     loadExpenses();
+                    updateDashboard(); // Ensure dashboard updates after deletion
                 } else if (deleteTarget.type === "group") {
                     let groups = JSON.parse(localStorage.getItem("groups")) || [];
                     groups = groups.filter(existingGroup => existingGroup !== deleteTarget.group);
@@ -378,6 +438,7 @@
 
                     loadGroups();
                     loadExpenses();
+                    updateDashboard(); // Update dashboard when a group is deleted
                 }
             }
             $("#delete-modal").addClass("hidden");
