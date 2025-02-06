@@ -629,53 +629,121 @@
 // $obj = new Welcome();
 // $obj->msg1();
 
-trait message1 {
-    public function msg1() {
-      echo "OOP is fun! ";
-    }
-  }
+// trait message1 {
+//     public function msg1() {
+//       echo "OOP is fun! ";
+//     }
+//   }
   
-  trait message2 {
-    public function msg2() {
-      echo "OOP reduces code duplication!";
-    }
-  }
+//   trait message2 {
+//     public function msg2() {
+//       echo "OOP reduces code duplication!";
+//     }
+//   }
   
-  class Welcome {
-    use message1;
-  }
+//   class Welcome {
+//     use message1;
+//   }
   
-  class Welcome2 {
-    use message1, message2;
-  }
+//   class Welcome2 {
+//     use message1, message2;
+//   }
   
-  $obj = new Welcome();
-  $obj->msg1();
-  echo "<br>";
+//   $obj = new Welcome();
+//   $obj->msg1();
+//   echo "<br>";
   
-  $obj2 = new Welcome2();
-  $obj2->msg1();
-  $obj2->msg2();
-  echo "<br>";
-  echo "<br>";
+//   $obj2 = new Welcome2();
+//   $obj2->msg1();
+//   $obj2->msg2();
+//   echo "<br>";
+//   echo "<br>";
 ?>
 
 <?php
-class domain {
-  protected static function getWebsiteName() {
-    return "Manav Vaishanani.com";
-  }
-}
+// class domain {
+//   protected static function getWebsiteName() {
+//     return "Manav Vaishanani.com";
+//   }
+// }
 
-class domainW3 extends domain {
-  public $websiteName;
-  public function __construct() {
-    $this->websiteName = parent::getWebsiteName();
-  }
-}
+// class domainW3 extends domain {
+//   public $websiteName;
+//   public function __construct() {
+//     $this->websiteName = parent::getWebsiteName();
+//   }
+// }
 
-$domainW3 = new domainW3;
-echo $domainW3 -> websiteName;
+// $domainW3 = new domainW3;
+// echo $domainW3 -> websiteName;
 ?>
+
+<?php
+// function printIterable($myIterable) {
+//   foreach($myIterable as $item) {
+//     echo $item;
+//   }
+// }
+
+// $arr = ["a", "b", "c"];
+// printIterable($arr);
+
+// function getIterable():iterable {
+//   return ['a', 'b', 'c'];
+// }
+
+
+// $myIterable = getIterable();
+// foreach($myIterable as $item) {
+//   echo $item;
+//   echo "<br>";
+// }
+?>
+
+<?php
+  // class MyIterator implements Iterator{
+  //   private $items = [];
+  //   private $position = 0;
+
+  //   public function __construct($items) {
+  //     $this->items = array_values($items);
+  //   }
+
+  //   public function current(){
+  //     return $this->items[$this->position];
+  //   }
+
+  //   public function key(){
+  //     return $this->position;
+  //   }
+
+  //   public function next(){
+  //     $this->position++;
+  //   }
+    
+  //   public function rewind(){
+  //     $this->position = 0;
+  //   }
+
+  //   public function valid(){
+  //     return $this->position < count($this->items);
+  //   }
+
+  // }
+  
+  // function printIterable(iterable $myIterable) {
+  //   foreach($myIterable as $item) {
+  //     echo $item;
+  //     echo "<br>";
+  //   }
+  // }
+
+  // $iterator = new MyIterator(["Manav", "Het", "Harsh"]);
+  // printIterable($iterator);
+?>
+
+
+
+
 </body>
 </html>
