@@ -10,7 +10,6 @@ class Database {
 
         // $dsn = "mysql:host={$config['host']}:{$config['port']};dbname={$config['dbname']};user=root;password=root;charset={$config['charset']};";
 
-        // $dsn = "mysql:host=localhost:3306;dbname=myapp;user=root;password=root;charset=utf8mb4;";
         $this->connection = new PDO($dsn, $username, $password, [
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ]);
