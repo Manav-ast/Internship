@@ -1,18 +1,18 @@
 <?php
 
 require 'functions.php';
-// require 'router.php';
 require 'Database.php';
+require 'Respones.php';
+require 'router.php';
 
-$config = require 'config.php';
 
-$db = new Database($config['database']);
 
-$id = $_GET['id'] ?? null;
+// $id = $_GET['id'] ?? null;
 // $query = "SELECT * FROM posts WHERE id = ?";
-$query = "SELECT * FROM posts WHERE id = :id";
+// $query = "SELECT * FROM posts WHERE id = :id";
 
 // $posts = $db->query($query, [$id])->fetchAll(PDO::FETCH_ASSOC);
-$posts = $db->query($query, ['id' => $id])->fetchAll(PDO::FETCH_ASSOC);
+// $posts = $db->query($query, ['id' => $id])->fetchAll(PDO::FETCH_ASSOC);
 
-dd($posts); 
+// dd($posts); 
+
