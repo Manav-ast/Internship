@@ -15,7 +15,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['body'] = 'A body should be between 1 and 1000 characters long.';
     }
 
-    if(empty($errors)){
+    if(!empty($errors)){
         $db->query("INSERT INTO notes (body, user_id) VALUES (:body, :user_id)", [
             'body' => $_POST['body'],
             'user_id' => 1
