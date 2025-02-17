@@ -1,6 +1,8 @@
 <?php
 
 namespace Core;
+
+use Core\Middleware\Middleware;
 class Router{
     protected $routes = [];
 
@@ -46,15 +48,15 @@ class Router{
         foreach($this->routes as $route){
             if($route['uri'] === $uri && $route['method'] === strtoupper($method)){
 
-                if($route['middleware'] === 'guest'){
-                    if($_SESSION['user'] ?? false){
-                        header('Location: /');
-                        die();
-                    }
-                }
-                return require base_path($route['controller']);
+                Middleware::resolve($route['middleware']);
+                
+                return require base_path('Http/controllers/' . $route['controller']);
             }
         }
+    }
+
+    public function previousUrl(){
+        return $_SERVER['HTTP_REFERER'];
     }
 
     public function abort($code = 404){
