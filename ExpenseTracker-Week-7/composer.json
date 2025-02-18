@@ -1,0 +1,26 @@
+{
+    "name": "hp/laracast-php-week-6",
+    "authors": [
+        {
+            "name": "Manav-ast",
+            "email": "manavvaishnani.ast@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/collections": "^11.42"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\" : "Core/",
+            "Http\\" : "Http/"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
