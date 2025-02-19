@@ -33,7 +33,7 @@ $db->query("UPDATE expenses SET name = :name, amount = :amount, group_id= :group
     'id' => $_POST['id'],
     'amount' => $_POST['amount'],
     'group_id' => $_POST['group_id'],
-    'date' => $created_at
+    'date' =>  $created_at
 ]);
 
 header('Location: /expenses');

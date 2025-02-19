@@ -7,16 +7,16 @@
 
         <div class="flex flex-col sm:flex-row sm:space-x-4 mb-6">
             <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center mb-4 sm:mb-0">
-                <p class="text-sm">Lifetime Expenses:</p>
+                <p class="text-sm">Lifetime Expenses (&#8377;) :</p>
 
                 <span id="lifetime-expenses" class="font-semibold text-lg"><?= $total[0]['total'] ?? '0' ?></span>
             </div>
             <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center mb-4 sm:mb-0">
-                <p class="text-sm">Total this Month:</p>
+                <p class="text-sm">Total this Month (&#8377;) :</p>
                 <span id="total-expenses" class="font-semibold text-lg"><?= $monthTotal[0]['monthTotal'] ?? '0' ?></span>
             </div>
             <div class="flex-1 p-4 bg-gray-100 rounded-lg text-center">
-                <p class="text-sm">Highest this Month:</p>
+                <p class="text-sm">Highest this Month (&#8377;) :</p>
                 <span id="highest-expense" class="font-semibold text-lg"><?= $maxExpense[0]['maxExpense'] ?? '0' ?></span>
             </div>
         </div>

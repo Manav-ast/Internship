@@ -11,9 +11,14 @@ class Validator
         return strlen($value) >= $min && strlen($value) <= $max;
     }
 
-    public static function email($value)
+    public static function number($value, $min = 0)
     {
-        return filter_var($value, FILTER_VALIDATE_EMAIL);
+        return is_numeric($value) && $value >= $min;
+    }
+
+    public static function date($value)
+    {
+        return (bool)strtotime($value);
     }
 }
 

@@ -8,13 +8,13 @@ $db = App::resolve(Database::class);
 
 $errors = [];
 
-if (! Validator::string($_POST['name'], 1, 1000)) {
-    $errors['name'] = 'A body should be between 1 and 1000 characters long.';
+if (! Validator::string($_POST['name'], 1, 100)) {
+    $errors['name'] = 'A body should be between 1 and 100 characters long.';
 }
 
 if (! empty($errors)) {
-    return view("notes/create.view.php", [
-        'heading' => 'Create a note',
+    return view("groups/create.view.php", [
+        'heading' => 'Create a group',
         'errors' => $errors
     ]);
 }
