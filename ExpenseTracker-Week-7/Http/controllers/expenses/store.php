@@ -18,10 +18,15 @@ $db = App::resolve(Database::class);
 //         'errors' => $errors
 //     ]);
 // }
-$db->query("INSERT INTO expenses (name, amount, group_id) VALUES (:name, :amount, :group_id)", [
+
+$created_at = $_POST['created_at'];
+$created_at = date('Y-m-d', strtotime($created_at));
+
+$db->query("INSERT INTO expenses (name, amount, group_id, created_at) VALUES (:name, :amount, :group_id, :created_at)", [
     'name' => $_POST['name'],
     'amount' => $_POST['amount'],
-    'group_id' => $_POST['group_id']
+    'group_id' => $_POST['group_id'],
+    'created_at' => $created_at 
 ]);
 
 header('Location: /expenses');

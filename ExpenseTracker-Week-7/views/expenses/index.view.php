@@ -29,20 +29,8 @@
                                 <td class="py-2 px-4"><span>&#8377; </span><?= $exp['amount'] ?></td>
                                 <td class="py-2 px-4"><?= $exp['created_at'] ?></td>
                                 <td class="py-2 px-4 text-center grid gap-1 grid-cols-2">
-                                    <form action="" method="POST">
-                                        <input type="hidden" name="_method" value="PATCH">
-                                        <input type="hidden" name="id" value="<?= $exp['id'] ?>">
-                                        <button class="text-blue-500 hover:underline" type="submit">
-                                            Update
-                                        </button>
-                                    </form>
-                                    <form action="" method="POST">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="id" value="<?= $exp['id'] ?>">
-                                        <button class="text-red-500 hover:underline" type="submit">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    <a href="/expense?id=<?= $exp['id'] ?>" class="text-blue-500 hover:underline">Update</a>
+                                    <button onclick="openModal(<?= $exp['id'] ?>)" class="text-red-500 hover:underline">Delete</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -51,7 +39,33 @@
             </div>
         </div>
     </div>
-    </div>
 </main>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm">
+        <h2 class="text-lg font-semibold mb-4">Confirm Deletion</h2>
+        <p>Are you sure you want to delete this expense?</p>
+        <div class="mt-4 flex justify-end space-x-4">
+            <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+            <form id="deleteForm" action="" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="id" id="expenseId">
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(expenseId) {
+        document.getElementById("expenseId").value = expenseId;
+        document.getElementById("deleteModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+        document.getElementById("deleteModal").classList.add("hidden");
+    }
+</script>
 
 <?php require base_path('views/partials/footer.php') ?>

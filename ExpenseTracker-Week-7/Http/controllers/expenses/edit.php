@@ -5,12 +5,13 @@ use Core\Database;
 
 $db = App::resolve(Database::class);
 
-$group = $db->query("SELECT * FROM expense_groups WHERE id = :id", [
-    'id' => $_GET['id']
-])->findOrFail();
+$groups = $db->query("SELECT * FROM expense_groups")->get();
+// dd($groups);
+$expense = $db->query("SELECT e.id,e.name,e.amount,e.group_id, e.created_at,g.name as group_name FROM expenses e JOIN expense_groups g on e.group_id=g.id")->findOrFail();
 
-view("groups/edit.view.php",[
-    'heading' => 'Edit group',
+view("expenses/edit.view.php",[
+    'heading' => 'Update expense',
     'errors' => [],
-    'group' => $group
+    'groups' => $groups,
+    'expense' => $expense
 ]);

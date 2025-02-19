@@ -4,20 +4,37 @@
 
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <p class="my-4">
-            <a href="/groups" class="text-blue-500 hover:underline">Back to all groups</a>
-        </p>
-        <p class="mb-10"><?= htmlspecialchars($group['name'])?> </p>
 
-        <a href="/group/edit?id=<?= $group['id'] ?>" class="inline-flex justify-center rounded-md border border-transparent bg-gray-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Edit</a>
-        
-        <form action="" method="POST" class="mt-4">
-            <input type="hidden" name="_method" value="DELETE">
-            <input type="hidden" name="id" value="<?= $group['id'] ?>">
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4" type="submit">
-                Delete
-            </button>
-        </form>
+        <a href="/expenses" class="text-blue-500 hover:underline">Back to all expenses</a>
+        <!-- Expenses Table -->
+        <div class="overflow-x-auto mt-4 max-h-72">
+            <div id="group-expenses-container">
+                <table class="min-w-full bg-gray-100 border border-gray-300 rounded-lg mt-2 overflow-hidden">
+                    <thead>
+                        <tr class="bg-green-500 text-white rounded-t-lg">
+                            <th class="py-2 px-4 text-left">Group Name</th>
+                            <th class="py-2 px-4 text-left">Expense Name</th>
+                            <th class="py-2 px-4 text-left">Amount</th>
+                            <th class="py-2 px-4 text-left">Date</th>
+                            <th class="py-2 px-4 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="rounded-b-lg">
+                        <!-- Expense rows will be dynamically added here -->
+                        <tr>
+                            <td class="py-2 px-4"><?= $expense['group_name'] ?></td>
+                            <td class="py-2 px-4"><?= $expense['name'] ?></td>
+                            <td class="py-2 px-4"><span>&#8377; </span><?= $expense['amount'] ?></td>
+                            <td class="py-2 px-4"><?= $expense['created_at'] ?></td>
+                            <td class="py-2 px-4 text-center grid gap-1 grid-cols-2">
+                                <a href="/expense/edit?id=<?= $expense['id'] ?>" class="text-blue-500 hover:underline">Update</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     </div>
 </main>
 

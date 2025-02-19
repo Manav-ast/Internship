@@ -14,7 +14,7 @@
             <?php endforeach ?>
         </ul>
         <p class="mt-4">
-            <a href="/groups/create" class="text-blue-500 hover:underline">Create note</a>
+            <a href="/groups/create" class="text-blue-500 hover:underline">Create group</a>
         </p>
     </div>
 </main>

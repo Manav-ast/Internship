@@ -18,6 +18,10 @@ $router->get('/expenses/create', 'expenses/create.php');
 $router->post('/expenses', 'expenses/store.php');
 $router->delete('/expenses', 'expenses/destroy.php');
 
+$router->get('/expense', 'expenses/show.php');
+$router->get('/expense/edit', 'expenses/edit.php');
+$router->patch('/expense', 'expenses/update.php');
+
 $router->get('/register', 'registration/create.php')->only('guest');
 $router->post('/register', 'registration/store.php')->only('guest');
 

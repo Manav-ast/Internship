@@ -6,7 +6,7 @@ use Core\Validator;
 
 $db = App::resolve(Database::class);
 
-$group = $db->query("SELECT * FROM expenses WHERE id = :id", [
+$expense = $db->query("SELECT * FROM expenses WHERE id = :id", [
     'id' => $_POST['id']
 ])->findOrFail();
 
@@ -17,17 +17,23 @@ if (! Validator::string($_POST['name'], 1, 1000)) {
 }
 
 if (count($errors)) {
-    return view("groups/edit.view.php", [
-        'heading' => 'Edit group',
+    return view("expenses", [
+        'heading' => 'Expenses',
         'errors' => $errors,
-        'group' => $group
+        'expense' => $expense
     ]);
 }
 
+$created_at = $_POST['date'];
+$created_at = date('Y-m-d', strtotime($created_at));
+
 //update note
-$db->query("UPDATE expenses SET name = :body WHERE id = :id", [
-    'body' => $_POST['name'],
-    'id' => $_POST['id']
+$db->query("UPDATE expenses SET name = :name, amount = :amount, group_id= :group_id, created_at= :date WHERE id = :id", [
+    'name' => $_POST['name'],
+    'id' => $_POST['id'],
+    'amount' => $_POST['amount'],
+    'group_id' => $_POST['group_id'],
+    'date' => $created_at
 ]);
 
 header('Location: /expenses');
