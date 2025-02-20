@@ -5,14 +5,14 @@
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <p class="mt-4">
-            <a href="/expenses/create" class="text-blue-500 hover:underline">Add Expense</a>
+            <a href="/expenses/create" class="text-blue-500 hover:bg-gray-800 hover:text-white font-bold py-2 px-4 rounded mt-4"><i class="fa-solid fa-plus"></i> Add Expense</a>
         </p>
         <!-- Expenses Table -->
         <div class="overflow-x-auto mt-4 max-h-72">
             <div id="group-expenses-container">
-                <table class="min-w-full bg-gray-100 border border-gray-300 rounded-lg mt-2 overflow-hidden">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg mt-2 overflow-hidden">
                     <thead>
-                        <tr class="bg-green-500 text-white rounded-t-lg">
+                        <tr class="bg-gray-800 text-white rounded-t-lg">
                             <th class="py-2 px-4 text-left">Group Name</th>
                             <th class="py-2 px-4 text-left">Expense Name</th>
                             <th class="py-2 px-4 text-left">Amount</th>
@@ -29,8 +29,8 @@
                                 <td class="py-2 px-4"><span>&#8377; </span><?= $exp['amount'] ?></td>
                                 <td class="py-2 px-4"><?= $exp['created_at'] ?></td>
                                 <td class="py-2 px-4 text-center grid gap-1 grid-cols-2">
-                                    <a href="/expense?id=<?= $exp['id'] ?>" class="text-blue-500 hover:underline">Update</a>
-                                    <button onclick="openModal(<?= $exp['id'] ?>)" class="text-red-500 hover:underline">Delete</button>
+                                    <a href="/expense?id=<?= $exp['id'] ?>" class="text-gray-800 hover:text-gray-500"><i class="fas fa-edit"></i></a>
+                                    <button onclick="openModal(<?= $exp['id'] ?>)" class="text-red-500 hover:text-red-800"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

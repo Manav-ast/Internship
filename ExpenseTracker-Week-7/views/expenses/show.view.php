@@ -5,13 +5,13 @@
 <main>
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
 
-        <a href="/expenses" class="text-blue-500 hover:underline">Back to all expenses</a>
+        <a href="/expenses" class="text-blue-500 hover:underline"> <i class="fa-solid fa-arrow-left"></i> All Expenses</a>
         <!-- Expenses Table -->
-        <div class="overflow-x-auto mt-4 max-h-72">
+        <div class="overflow-x-auto mt-4 max-h-72 overflow-auto">
             <div id="group-expenses-container">
-                <table class="min-w-full bg-gray-100 border border-gray-300 rounded-lg mt-2 overflow-hidden">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg mt-2 overflow-hidden">
                     <thead>
-                        <tr class="bg-green-500 text-white rounded-t-lg">
+                        <tr class="bg-gray-800 text-white rounded-t-lg">
                             <th class="py-2 px-4 text-left">Group Name</th>
                             <th class="py-2 px-4 text-left">Expense Name</th>
                             <th class="py-2 px-4 text-left">Amount</th>
@@ -26,8 +26,8 @@
                             <td class="py-2 px-4"><?= $expense['name'] ?></td>
                             <td class="py-2 px-4"><span>&#8377; </span><?= $expense['amount'] ?></td>
                             <td class="py-2 px-4"><?= $expense['created_at'] ?></td>
-                            <td class="py-2 px-4 text-center grid gap-1 grid-cols-2">
-                                <a href="/expense/edit?id=<?= $expense['id'] ?>" class="text-blue-500 hover:underline">Update</a>
+                            <td class="py-2 px-4 text-center">
+                                <a href="/expense/edit?id=<?= $expense['id'] ?>" class="text-gray-800 hover:underline"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
                     </tbody>
