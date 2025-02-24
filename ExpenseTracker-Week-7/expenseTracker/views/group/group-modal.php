@@ -188,15 +188,14 @@ $(document).ready(function() {
 
 // Toast notification function
 function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up ${
-        type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    } text-white`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
+    const $toast = $('<div>')
+        .addClass(`fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`)
+        .text(message);
+    
+    $('body').append($toast);
     
     setTimeout(() => {
-        toast.remove();
+        $toast.remove();
     }, 3000);
 }
 </script>

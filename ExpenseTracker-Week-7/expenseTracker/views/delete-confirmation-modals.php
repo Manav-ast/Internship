@@ -60,24 +60,24 @@
 
 <script>
     function openDeleteGroupModal(groupId) {
-        document.getElementById('deleteGroupId').value = groupId;
-        document.getElementById('deleteGroupError').classList.add('hidden');
-        document.getElementById('deleteGroupModal').classList.remove('hidden');
+        $('#deleteGroupId').val(groupId);
+        $('#deleteGroupError').addClass('hidden');
+        $('#deleteGroupModal').removeClass('hidden');
     }
 
     function closeDeleteGroupModal() {
-        document.getElementById('deleteGroupModal').classList.add('hidden');
-        document.getElementById('deleteGroupError').classList.add('hidden');
+        $('#deleteGroupModal').addClass('hidden');
+        $('#deleteGroupError').addClass('hidden');
     }
 
     function openDeleteExpenseModal(expenseId) {
-        document.getElementById('deleteExpenseId').value = expenseId;
-        document.getElementById('deleteExpenseError').classList.add('hidden');
-        document.getElementById('deleteExpenseModal').classList.remove('hidden');
+        $('#deleteExpenseId').val(expenseId);
+        $('#deleteExpenseError').addClass('hidden');
+        $('#deleteExpenseModal').removeClass('hidden');
     }
 
     function closeDeleteExpenseModal() {
-        document.getElementById('deleteExpenseModal').classList.add('hidden');
+        $('#deleteExpenseModal').addClass('hidden');
     }
 
     // Handle delete group form submission
@@ -97,15 +97,16 @@
                         // Close the modal
                         closeDeleteGroupModal();
                         
-                        // Show success message
-                        const successMessage = document.createElement('div');
-                        successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up';
-                        successMessage.textContent = response.message || 'Group deleted successfully!';
-                        document.body.appendChild(successMessage);
+                        // Show success message using jQuery
+                        const $successMessage = $('<div>')
+                            .addClass('fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up')
+                            .text(response.message || 'Group deleted successfully!');
+                        
+                        $('body').append($successMessage);
                         
                         // Remove success message after 3 seconds
                         setTimeout(() => {
-                            successMessage.remove();
+                            $successMessage.remove();
                         }, 3000);
 
                         // Update both groups list and expenses
@@ -152,16 +153,16 @@
                         // Update expenses list
                         fetchAndUpdateExpenses();
                     } else {
-                        // Show error message
-                        const errorDiv = document.getElementById('deleteGroupError');
-                        errorDiv.textContent = response.message || 'An error occurred while deleting the group.';
-                        errorDiv.classList.remove('hidden');
+                        // Show error message using jQuery
+                        $('#deleteGroupError')
+                            .text(response.message || 'An error occurred while deleting the group.')
+                            .removeClass('hidden');
                     }
                 },
                 error: function() {
-                    const errorDiv = document.getElementById('deleteGroupError');
-                    errorDiv.textContent = 'An error occurred while deleting the group. Please try again.';
-                    errorDiv.classList.remove('hidden');
+                    $('#deleteGroupError')
+                        .text('An error occurred while deleting the group. Please try again.')
+                        .removeClass('hidden');
                 }
             });
         });
@@ -187,14 +188,14 @@
                         // Show success message
                         showToast('Expense deleted successfully');
                     } else {
-                        // Show error in the modal
+                        // Show error in the modal using jQuery
                         $('#deleteExpenseError')
                             .text(response.message || 'Failed to delete expense')
                             .removeClass('hidden');
                     }
                 },
                 error: function() {
-                    // Show error in the modal
+                    // Show error in the modal using jQuery
                     $('#deleteExpenseError')
                         .text('An error occurred while deleting the expense')
                         .removeClass('hidden');
@@ -204,15 +205,14 @@
 
     // Toast notification function (if not already defined elsewhere)
     function showToast(message, type = 'success') {
-        const toast = document.createElement('div');
-        toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up ${
-            type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white`;
-        toast.textContent = message;
-        document.body.appendChild(toast);
+        const $toast = $('<div>')
+            .addClass(`fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`)
+            .text(message);
+        
+        $('body').append($toast);
         
         setTimeout(() => {
-            toast.remove();
+            $toast.remove();
         }, 3000);
     }
 </script>
