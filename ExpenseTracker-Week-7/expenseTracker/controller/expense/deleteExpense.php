@@ -13,18 +13,15 @@ try {
     }
 
     // Verify the expense exists
-    $expense = $db->query('SELECT id FROM expense WHERE id = :id', [
-        'id' => $_POST['id']
-    ])->find();
+    $expense = $db->select('expense', 'id', ['id' => $_POST['id']])->find();
 
     if (!$expense) {
         throw new Exception('Expense not found');
     }
 
-    // Delete the expense
-    $db->query('DELETE FROM expense WHERE id = :id', [
-        'id' => $_POST['id']
-    ]);
+    // Delete the expense using delete method
+    $whereCondition = ['id' => $_POST['id']];
+    $db->delete('expense', $whereCondition);
 
     // Return success response
     echo json_encode([

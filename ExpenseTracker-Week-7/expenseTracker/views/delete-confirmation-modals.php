@@ -97,20 +97,23 @@
                         // Close the modal
                         closeDeleteGroupModal();
                         
-                        // Fetch and update the groups list
+                        // Show success message
+                        const successMessage = document.createElement('div');
+                        successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up';
+                        successMessage.textContent = response.message || 'Group deleted successfully!';
+                        document.body.appendChild(successMessage);
+                        
+                        // Remove success message after 3 seconds
+                        setTimeout(() => {
+                            successMessage.remove();
+                        }, 3000);
+
+                        // Update both groups list and expenses
                         $.ajax({
                             url: '/getGroups',
                             type: 'GET',
                             success: function(groupsData) {
-                                // Update the groups dropdown in expense modal
-                                const groupSelect = $('#group_id');
-                                groupSelect.empty();
-                                groupSelect.append('<option value="">Select Category</option>');
-                                groupsData.forEach(group => {
-                                    groupSelect.append(`<option value="${group.id}">${group.name}</option>`);
-                                });
-                                
-                                // Update the groups list in the sidebar
+                                // Update groups in sidebar
                                 const groupsList = $('.space-y-3');
                                 if (groupsList.length) {
                                     groupsList.html(groupsData.map(group => `
@@ -133,31 +136,38 @@
                                         </div>
                                     `).join(''));
                                 }
-                            },
-                            error: function() {
-                                showToast('Error fetching updated groups list', 'error');
+
+                                // Update expense form group select
+                                const groupSelect = $('#group_id');
+                                if (groupSelect.length) {
+                                    groupSelect.empty();
+                                    groupSelect.append('<option value="">Select Category</option>');
+                                    groupsData.forEach(group => {
+                                        groupSelect.append(`<option value="${group.id}">${group.name}</option>`);
+                                    });
+                                }
                             }
                         });
-                        
-                        // Show success message
-                        showToast(response.message || 'Group deleted successfully!', 'success');
+
+                        // Update expenses list
+                        fetchAndUpdateExpenses();
                     } else {
                         // Show error message
                         const errorDiv = document.getElementById('deleteGroupError');
-                        errorDiv.textContent = response.error || 'Failed to delete group';
+                        errorDiv.textContent = response.message || 'An error occurred while deleting the group.';
                         errorDiv.classList.remove('hidden');
                     }
                 },
                 error: function() {
-                    // Show error message
                     const errorDiv = document.getElementById('deleteGroupError');
-                    errorDiv.textContent = 'An error occurred while deleting the group';
+                    errorDiv.textContent = 'An error occurred while deleting the group. Please try again.';
                     errorDiv.classList.remove('hidden');
                 }
             });
         });
+    });
 
-        $('#deleteExpenseForm').on('submit', function(e) {
+    $('#deleteExpenseForm').on('submit', function(e) {
             e.preventDefault();
             
             const formData = $(this).serialize();
@@ -191,7 +201,6 @@
                 }
             });
         });
-    });
 
     // Toast notification function (if not already defined elsewhere)
     function showToast(message, type = 'success') {

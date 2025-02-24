@@ -30,9 +30,7 @@ if (!Validator::required($group_name, 'group_name')) {
 }
 
 // Check if group exists
-$group = $db->query('SELECT id FROM expense_categories WHERE id = :id', [
-    'id' => $group_id
-])->find();
+$group = $db->select('expense_categories', 'id', ['id' => $group_id])->find();
 
 if (!$group) {
     $errors['group_id'] = "Group does not exist";

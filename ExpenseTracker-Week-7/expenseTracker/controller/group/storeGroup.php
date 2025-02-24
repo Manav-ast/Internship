@@ -21,9 +21,7 @@ if (strlen($group_name) > 255) {
 }
 
 // Check if group name already exists
-$existingGroup = $db->query("SELECT id FROM expense_categories WHERE name = :name", [
-    'name' => $group_name
-])->find();
+$existingGroup = $db->select('expense_categories', 'id', ['name' => $group_name])->find();
 
 if ($existingGroup) {
     $errors['group_name'] = 'A category with this name already exists';
@@ -38,9 +36,9 @@ if (!empty($errors)) {
 }
 
 try {
-    $db->query("INSERT INTO expense_categories (name) VALUES (:name)", [
-        'name' => $group_name
-    ]);
+    // Insert the group using insert method
+    $groupData = ['name' => $group_name];
+    $db->insert('expense_categories', $groupData);
 
     echo json_encode([
         'success' => true,

@@ -5,8 +5,8 @@ try {
     $config = require base_path('config.php');
     $db = new Database($config['database']);
 
-    // Fetch groups with prepared statement
-    $groups = $db->query("SELECT * FROM expense_categories")->get();
+    // Fetch groups with select method
+    $groups = $db->select('expense_categories', '*')->get();
 
     // Fetch expenses with prepared statement and proper JOIN
     $expenses = $db->query("
@@ -19,26 +19,19 @@ try {
     ")->get();
 
     // Calculate total expense
-    $totalExpense = $db->query("
-        SELECT COALESCE(SUM(amount), 0) as total 
-        FROM expense
-    ")->find()['total'];
+    $totalExpense = $db->select('expense', 'COALESCE(SUM(amount), 0) as total')->find()['total'];
 
     // Calculate this month's total
-    $thisMonth = $db->query("
-        SELECT COALESCE(SUM(amount), 0) as total 
-        FROM expense 
-        WHERE MONTH(date) = MONTH(CURRENT_DATE()) 
-        AND YEAR(date) = YEAR(CURRENT_DATE())
-    ")->find()['total'];
+    $thisMonth = $db->select('expense', 'COALESCE(SUM(amount), 0) as total', [
+        'MONTH(date)' => 'MONTH(CURRENT_DATE())',
+        'YEAR(date)' => 'YEAR(CURRENT_DATE())'
+    ])->find()['total'];
 
     // Get highest expense this month
-    $maxExpense = $db->query("
-        SELECT COALESCE(MAX(amount), 0) as max_amount 
-        FROM expense 
-        WHERE MONTH(date) = MONTH(CURRENT_DATE()) 
-        AND YEAR(date) = YEAR(CURRENT_DATE())
-    ")->find()['max_amount'];
+    $maxExpense = $db->select('expense', 'COALESCE(MAX(amount), 0) as max_amount', [
+        'MONTH(date)' => 'MONTH(CURRENT_DATE())',
+        'YEAR(date)' => 'YEAR(CURRENT_DATE())'
+    ])->find()['max_amount'];
 
     views("index.view.php", [
         'groups' => $groups,

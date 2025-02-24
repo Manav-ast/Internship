@@ -34,9 +34,7 @@ if (!Validator::required($group_id, 'group_id')) {
 }
 
 // Check if group exists
-$group = $db->query('SELECT id FROM expense_categories WHERE id = :id', [
-    'id' => $group_id
-])->find();
+$group = $db->select('expense_categories', 'id', ['id' => $group_id])->find();
 
 if (!$group) {
     $errors['group_id'] = "Selected group does not exist";
@@ -50,46 +48,39 @@ if (!empty($errors)) {
 }
 
 try {
-    // Check if expense exists
-    $expense = $db->query('SELECT id FROM expense WHERE id = :id', [
-        'id' => $expense_id
-    ])->find();
-
-    if (!$expense) {
-        header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Expense not found']);
-        exit();
-    }
-
     // Format the date
     $formatted_date = date('Y-m-d', strtotime($expense_date));
 
-    // Update the expense
-    $db->query('UPDATE expense SET 
-        expense_name = :expense_name,
-        amount = :amount,
-        date = :date,
-        group_id = :group_id
-        WHERE id = :id', [
+    // Update the expense using update method
+    $updateData = [
         'expense_name' => $expense_name,
         'amount' => $expense_amount,
         'date' => $formatted_date,
-        'group_id' => $group_id,
-        'id' => $expense_id
-    ]);
+        'group_id' => $group_id
+    ];
+
+    $whereCondition = ['id' => $expense_id];
+
+    $db->update('expense', $updateData, $whereCondition);
 
     // Return success response
     header('Content-Type: application/json');
     echo json_encode([
         'success' => true,
-        'message' => 'Expense updated successfully'
+        'message' => 'Expense updated successfully!'
     ]);
 
-} catch (PDOException $e) {
+} catch (\Exception $e) {
+    // Log the error
+    error_log("Error updating expense: " . $e->getMessage());
+    
+    // Return error response
     header('Content-Type: application/json');
+    http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Database error occurred'
+        'error' => $e->getMessage()
     ]);
 }
+
 exit();

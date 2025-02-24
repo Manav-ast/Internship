@@ -122,10 +122,15 @@ $(document).ready(function() {
                             success: function(groupsData) {
                                 // Update the groups dropdown in expense modal
                                 const groupSelect = $('#group_id');
+                                const editGroupSelect = $('#editExpenseGroup');
                                 groupSelect.empty();
+                                editGroupSelect.empty();
                                 groupSelect.append('<option value="">Select Category</option>');
+                                editGroupSelect.append('<option value="">Select Category</option>');
                                 groupsData.forEach(group => {
-                                    groupSelect.append(`<option value="${group.id}">${group.name}</option>`);
+                                    const option = `<option value="${group.id}">${group.name}</option>`;
+                                    groupSelect.append(option);
+                                    editGroupSelect.append(option);
                                 });
                                 
                                 // Update the groups list in the sidebar

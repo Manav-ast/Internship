@@ -24,9 +24,7 @@ $currentDateTime = date('Y-m-d H:i:s');
 
 try {
     // Verify that the group exists
-    $group = $db->query('SELECT id FROM expense_categories WHERE id = :id', [
-        'id' => $_POST['group_id']
-    ])->find();
+    $group = $db->select('expense_categories', 'id', ['id' => $_POST['group_id']])->find();
 
     if (!$group) {
         echo json_encode([
@@ -36,14 +34,16 @@ try {
         exit();
     }
 
-    // Insert the expense
-    $db->query('INSERT INTO expense (expense_name, amount, date, group_id, created_at) VALUES (:expense_name, :amount, :date, :group_id, :created_at)', [
+    // Insert the expense using the insert method
+    $expenseData = [
         'expense_name' => $_POST['expense_name'],
         'amount' => $_POST['amount'],
         'date' => $date,
         'group_id' => $_POST['group_id'],
         'created_at' => $currentDateTime
-    ]);
+    ];
+    
+    $db->insert('expense', $expenseData);
 
     // Return success response with message
     echo json_encode([
@@ -51,27 +51,15 @@ try {
         'message' => 'Expense added successfully!'
     ]);
 
-} catch (\PDOException $e) {
-    // Log the error with details
-    error_log("Error storing expense: " . $e->getMessage());
-    
-    // Return error response with more details in development
-    $errorMessage = 'An error occurred while saving the expense';
-    if (in_array(getenv('APP_ENV'), ['local', 'development'])) {
-        $errorMessage .= ': ' . $e->getMessage();
-    }
-    
-    echo json_encode([
-        'success' => false,
-        'errors' => ['general' => $errorMessage]
-    ]);
 } catch (\Exception $e) {
-    // Log other types of errors
-    error_log("Unexpected error storing expense: " . $e->getMessage());
+    // Log the error
+    error_log("Error adding expense: " . $e->getMessage());
     
+    // Return error response
+    http_response_code(500);
     echo json_encode([
         'success' => false,
-        'errors' => ['general' => 'An unexpected error occurred']
+        'error' => $e->getMessage()
     ]);
 }
 

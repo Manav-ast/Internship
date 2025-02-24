@@ -7,7 +7,7 @@ $config = require base_path('config.php');
 $db = new Database($config['database']);
 
 try {
-    $groups = $db->query("SELECT * FROM expense_categories ORDER BY name")->get();
+    $groups = $db->select('expense_categories', '*', [], ['name' => 'ASC'])->get();
     echo json_encode($groups);
 } catch (Exception $e) {
     error_log("Error fetching groups: " . $e->getMessage());

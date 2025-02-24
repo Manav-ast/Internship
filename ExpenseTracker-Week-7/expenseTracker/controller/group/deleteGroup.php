@@ -32,10 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && $_POST[
             exit();
         }
 
-        // Delete the group
-        $db->query("DELETE FROM expense_categories WHERE id = :id", [
-            'id' => $group_id
-        ]);
+        // Delete the group using delete method
+        $whereCondition = ['id' => $group_id];
+        $db->delete('expense_categories', $whereCondition);
         
         echo json_encode([
             'success' => true,
@@ -50,11 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && $_POST[
     }
     exit();
 } else {
-    // Invalid request method
-    header('Content-Type: application/json');
+    http_response_code(405);
     echo json_encode([
         'success' => false,
-        'message' => 'Invalid request method'
+        'message' => 'Method not allowed'
     ]);
     exit();
 }
