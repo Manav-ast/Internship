@@ -2,15 +2,18 @@
 use Core\Database;
 use Core\Validator;
 
+header('Content-Type: application/json');
+
 $config = require base_path('config.php');
 $db = new Database($config['database']);
 
 // Validate the expense data
 if (!Validator::validateExpense($_POST)) {
     $errors = Validator::getErrors();
-    // Return errors as JSON
-    header('Content-Type: application/json');
-    echo json_encode(['errors' => $errors]);
+    echo json_encode([
+        'success' => false,
+        'errors' => $errors
+    ]);
     exit();
 }
 
@@ -26,8 +29,10 @@ try {
     ])->find();
 
     if (!$group) {
-        header('Content-Type: application/json');
-        echo json_encode(['errors' => ['group_id' => 'Selected group does not exist']]);
+        echo json_encode([
+            'success' => false,
+            'errors' => ['group_id' => 'Selected group does not exist']
+        ]);
         exit();
     }
 
@@ -40,17 +45,34 @@ try {
         'created_at' => $currentDateTime
     ]);
 
-    // Return success response
-    header('Content-Type: application/json');
-    echo json_encode(['success' => true]);
+    // Return success response with message
+    echo json_encode([
+        'success' => true,
+        'message' => 'Expense added successfully!'
+    ]);
 
-} catch (\Exception $e) {
-    // Log the error
+} catch (\PDOException $e) {
+    // Log the error with details
     error_log("Error storing expense: " . $e->getMessage());
     
-    // Return error response
-    header('Content-Type: application/json');
-    echo json_encode(['errors' => ['general' => 'An error occurred while saving the expense']]);
+    // Return error response with more details in development
+    $errorMessage = 'An error occurred while saving the expense';
+    if (in_array(getenv('APP_ENV'), ['local', 'development'])) {
+        $errorMessage .= ': ' . $e->getMessage();
+    }
+    
+    echo json_encode([
+        'success' => false,
+        'errors' => ['general' => $errorMessage]
+    ]);
+} catch (\Exception $e) {
+    // Log other types of errors
+    error_log("Unexpected error storing expense: " . $e->getMessage());
+    
+    echo json_encode([
+        'success' => false,
+        'errors' => ['general' => 'An unexpected error occurred']
+    ]);
 }
 
 exit();

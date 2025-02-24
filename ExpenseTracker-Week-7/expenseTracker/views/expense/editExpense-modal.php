@@ -204,10 +204,13 @@ $('#editExpenseForm').validate({
                     // Close modal
                     closeEditModal();
                     
-                    // Redirect after a brief delay to show the message
+                    // Update the expenses list and summary instead of redirecting
+                    fetchAndUpdateExpenses();
+                    
+                    // Remove success message after 3 seconds
                     setTimeout(() => {
-                        window.location.href = '/';
-                    }, 1000);
+                        successMessage.remove();
+                    }, 3000);
                 } else if (response.errors) {
                     displayEditErrors(response.errors);
                 }

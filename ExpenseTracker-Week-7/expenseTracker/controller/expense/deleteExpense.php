@@ -1,17 +1,47 @@
 <?php
 use Core\Database;
-require base_path('Core/Database.php');
+
+header('Content-Type: application/json');
+
 $config = require base_path('config.php');
 $db = new Database($config['database']);
 
-// Ensure 'id' is set before using it
-if (!isset($_POST['id'])) {
-    die("Error: ID not provided");
+try {
+    // Ensure 'id' is set before using it
+    if (!isset($_POST['id'])) {
+        throw new Exception('ID not provided');
+    }
+
+    // Verify the expense exists
+    $expense = $db->query('SELECT id FROM expense WHERE id = :id', [
+        'id' => $_POST['id']
+    ])->find();
+
+    if (!$expense) {
+        throw new Exception('Expense not found');
+    }
+
+    // Delete the expense
+    $db->query('DELETE FROM expense WHERE id = :id', [
+        'id' => $_POST['id']
+    ]);
+
+    // Return success response
+    echo json_encode([
+        'success' => true,
+        'message' => 'Expense deleted successfully!'
+    ]);
+
+} catch (\Exception $e) {
+    // Log the error
+    error_log("Error deleting expense: " . $e->getMessage());
+    
+    // Return error response
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
 
-// Delete the expense:
-$db->query('DELETE FROM expense WHERE id = :id', ['id' => $_POST['id']]);
-
-// Redirect back to home
-header('Location: /');
 exit();

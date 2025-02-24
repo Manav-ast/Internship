@@ -1,10 +1,10 @@
 <?php 
 namespace Core;
 
-
 use PDO;
+use PDOException;
 
-class Database{
+class Database {
 
     public $connection;
     public $statement;
@@ -12,17 +12,28 @@ class Database{
     // connect with db:
     public function __construct($config){
     
-        $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset=utf8mb4";
-        $this->connection = new PDO($dsn,'root','root');
+        try {
+            $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};charset=utf8mb4";
+            $this->connection = new PDO($dsn,'root','root', [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
+        } catch (PDOException $e) {
+            throw new PDOException("Connection failed: " . $e->getMessage());
+        }
     }
 
     // fire query on db
     public function query($query,$params = []){
     
-        $this->statement = $this->connection->prepare($query);
-        $this->statement->execute($params);
+        try {
+            $this->statement = $this->connection->prepare($query);
+            $this->statement->execute($params);
 
-        return $this;
+            return $this;
+        } catch (PDOException $e) {
+            throw new PDOException("Query failed: " . $e->getMessage());
+        }
     }
 
     public function find(){
@@ -44,7 +55,3 @@ class Database{
         return $result;
     }
 }
-
-
-
-?>

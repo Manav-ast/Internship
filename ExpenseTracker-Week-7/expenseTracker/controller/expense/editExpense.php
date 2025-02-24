@@ -45,42 +45,51 @@ if (!$group) {
 // If there are validation errors, return them
 if (!empty($errors)) {
     header('Content-Type: application/json');
-    echo json_encode(['errors' => $errors]);
+    echo json_encode(['success' => false, 'errors' => $errors]);
     exit();
 }
 
 try {
+    // Check if expense exists
+    $expense = $db->query('SELECT id FROM expense WHERE id = :id', [
+        'id' => $expense_id
+    ])->find();
+
+    if (!$expense) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Expense not found']);
+        exit();
+    }
+
     // Format the date
     $formatted_date = date('Y-m-d', strtotime($expense_date));
-    
+
     // Update the expense
-    $db->query(
-        'UPDATE expense SET 
-            expense_name = :name, 
-            amount = :amount, 
-            date = :date,
-            group_id = :group_id 
-        WHERE id = :id',
-        [
-            'name' => $expense_name,
-            'amount' => $expense_amount,
-            'date' => $formatted_date,
-            'group_id' => $group_id,
-            'id' => $expense_id
-        ]
-    );
+    $db->query('UPDATE expense SET 
+        expense_name = :expense_name,
+        amount = :amount,
+        date = :date,
+        group_id = :group_id
+        WHERE id = :id', [
+        'expense_name' => $expense_name,
+        'amount' => $expense_amount,
+        'date' => $formatted_date,
+        'group_id' => $group_id,
+        'id' => $expense_id
+    ]);
 
     // Return success response
     header('Content-Type: application/json');
-    echo json_encode(['success' => true]);
+    echo json_encode([
+        'success' => true,
+        'message' => 'Expense updated successfully'
+    ]);
 
-} catch (\Exception $e) {
-    // Log the error
-    error_log("Error updating expense: " . $e->getMessage());
-    
-    // Return error response
+} catch (PDOException $e) {
     header('Content-Type: application/json');
-    echo json_encode(['errors' => ['general' => 'An error occurred while updating the expense']]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Database error occurred'
+    ]);
 }
-
 exit();

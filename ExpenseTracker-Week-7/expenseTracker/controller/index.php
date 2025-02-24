@@ -11,37 +11,41 @@ try {
     // Fetch expenses with prepared statement and proper JOIN
     $expenses = $db->query("
         SELECT 
-            e.id,
-            e.expense_name,
-            e.amount,
-            e.date,
-            e.created_at,
-            e.group_id,
+            e.*,
             ec.name as category_name
         FROM expense e
-        JOIN expense_categories ec ON e.group_id = ec.id
-        ORDER BY e.created_at DESC
+        LEFT JOIN expense_categories ec ON e.group_id = ec.id
+        ORDER BY e.date DESC, e.id DESC
     ")->get();
 
-    // Fetch all required data in a single query using subqueries
-    $stats = $db->query("
-        SELECT 
-            (SELECT SUM(amount) FROM expense) as total_expense,
-            (SELECT MAX(amount) FROM expense 
-             WHERE MONTH(date) = MONTH(CURRENT_DATE())
-            ) as max_expense,
-            (SELECT SUM(amount) FROM expense 
-             WHERE MONTH(date) = MONTH(CURRENT_DATE())
-             AND YEAR(date) = YEAR(CURRENT_DATE())
-            ) as total_this_month
-    ")->find();
+    // Calculate total expense
+    $totalExpense = $db->query("
+        SELECT COALESCE(SUM(amount), 0) as total 
+        FROM expense
+    ")->find()['total'];
+
+    // Calculate this month's total
+    $thisMonth = $db->query("
+        SELECT COALESCE(SUM(amount), 0) as total 
+        FROM expense 
+        WHERE MONTH(date) = MONTH(CURRENT_DATE()) 
+        AND YEAR(date) = YEAR(CURRENT_DATE())
+    ")->find()['total'];
+
+    // Get highest expense this month
+    $maxExpense = $db->query("
+        SELECT COALESCE(MAX(amount), 0) as max_amount 
+        FROM expense 
+        WHERE MONTH(date) = MONTH(CURRENT_DATE()) 
+        AND YEAR(date) = YEAR(CURRENT_DATE())
+    ")->find()['max_amount'];
 
     views("index.view.php", [
         'groups' => $groups,
         'expenses' => $expenses,
-        'totalExpense' => $stats['total_expense'] ?? 0,
-        'maxExpense' => $stats['max_expense'] ?? 0,
-        'thisMonth' => $stats['total_this_month'] ?? 0
+        'totalExpense' => $totalExpense,
+        'thisMonth' => $thisMonth,
+        'maxExpense' => $maxExpense
     ]);
 
 } catch (\Exception $e) {

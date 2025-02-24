@@ -41,11 +41,12 @@
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500">Are you sure you want to delete this expense? This action cannot be undone.</p>
             </div>
+            <div id="deleteExpenseError" class="mt-2 text-sm text-red-600 hidden"></div>
             <form id="deleteExpenseForm" method="POST" action="/deleteExpense" class="mt-4">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="id" id="deleteExpenseId">
                 <div class="flex justify-center space-x-4">
-                    <button type="button" onclick="closeDeleteExpenseModal()" class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    <button type="button" onclick="closeDeleteExpenseModal()" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Cancel
                     </button>
                     <button type="submit" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
@@ -71,6 +72,7 @@
 
     function openDeleteExpenseModal(expenseId) {
         document.getElementById('deleteExpenseId').value = expenseId;
+        document.getElementById('deleteExpenseError').classList.add('hidden');
         document.getElementById('deleteExpenseModal').classList.remove('hidden');
     }
 
@@ -92,56 +94,133 @@
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        // Show success message
-                        const successMessage = document.createElement('div');
-                        successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up';
-                        successMessage.textContent = response.message || 'Group deleted successfully!';
-                        
-                        // Add animation keyframes if not already present
-                        if (!document.querySelector('#toast-animation')) {
-                            const style = document.createElement('style');
-                            style.id = 'toast-animation';
-                            style.textContent = `
-                                @keyframes fadeInUp {
-                                    from {
-                                        opacity: 0;
-                                        transform: translateY(20px);
-                                    }
-                                    to {
-                                        opacity: 1;
-                                        transform: translateY(0);
-                                    }
-                                }
-                                .animate-fade-in-up {
-                                    animation: fadeInUp 0.3s ease-out;
-                                }
-                            `;
-                            document.head.appendChild(style);
-                        }
-                        
-                        document.body.appendChild(successMessage);
-                        
-                        // Close modal
+                        // Close the modal
                         closeDeleteGroupModal();
                         
-                        // Redirect after a brief delay
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 1000);
+                        // Fetch and update the groups list
+                        $.ajax({
+                            url: '/getGroups',
+                            type: 'GET',
+                            success: function(groupsData) {
+                                // Update the groups dropdown in expense modal
+                                const groupSelect = $('#group_id');
+                                groupSelect.empty();
+                                groupSelect.append('<option value="">Select Category</option>');
+                                groupsData.forEach(group => {
+                                    groupSelect.append(`<option value="${group.id}">${group.name}</option>`);
+                                });
+                                
+                                // Update the groups list in the sidebar
+                                const groupsList = $('.space-y-3');
+                                if (groupsList.length) {
+                                    groupsList.html(groupsData.map(group => `
+                                        <div class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg group hover:bg-gray-100">
+                                            <span class="text-gray-700">${group.name}</span>
+                                            <div class="hidden group-hover:flex items-center space-x-2">
+                                                <button onclick="openEditGroupModal(${group.id}, '${group.name}')" 
+                                                        class="text-gray-500 hover:text-blue-600">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                                    </svg>
+                                                </button>
+                                                <button onclick="openDeleteGroupModal(${group.id})" 
+                                                        class="text-gray-500 hover:text-red-600">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    `).join(''));
+                                }
+                            },
+                            error: function() {
+                                showToast('Error fetching updated groups list', 'error');
+                            }
+                        });
+                        
+                        // Show success message
+                        showToast(response.message || 'Group deleted successfully!', 'success');
                     } else {
-                        // Show error message in modal
+                        // Show error message
                         const errorDiv = document.getElementById('deleteGroupError');
-                        errorDiv.textContent = response.message || 'Error deleting group';
+                        errorDiv.textContent = response.error || 'Failed to delete group';
                         errorDiv.classList.remove('hidden');
                     }
                 },
                 error: function() {
-                    // Show error message in modal
+                    // Show error message
                     const errorDiv = document.getElementById('deleteGroupError');
                     errorDiv.textContent = 'An error occurred while deleting the group';
                     errorDiv.classList.remove('hidden');
                 }
             });
         });
+
+        $('#deleteExpenseForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = $(this).serialize();
+            
+            $.ajax({
+                url: '/deleteExpense',
+                method: 'POST',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        // Close the delete modal
+                        closeDeleteExpenseModal();
+                        
+                        // Update the expenses list and summary
+                        fetchAndUpdateExpenses();
+                        
+                        // Show success message
+                        showToast('Expense deleted successfully');
+                    } else {
+                        // Show error in the modal
+                        $('#deleteExpenseError')
+                            .text(response.message || 'Failed to delete expense')
+                            .removeClass('hidden');
+                    }
+                },
+                error: function() {
+                    // Show error in the modal
+                    $('#deleteExpenseError')
+                        .text('An error occurred while deleting the expense')
+                        .removeClass('hidden');
+                }
+            });
+        });
     });
+
+    // Toast notification function (if not already defined elsewhere)
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up ${
+            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        } text-white`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
 </script>
+
+<style>
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+}
+</style>

@@ -4,7 +4,7 @@
 <div class="min-h-screen bg-gray-50">
 
     <!-- Navigation -->
-    <div class="fixed top-0 left-0 right-0 z-10 bg-gray-50">
+    <div class="bg-gray-50">
         <nav class="bg-white shadow-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="pt-[calc(64px+160px)]">
+    <div class="pt-4">
         <main class="scroll-smooth overflow-y-scroll">
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

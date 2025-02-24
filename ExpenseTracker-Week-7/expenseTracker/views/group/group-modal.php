@@ -112,48 +112,67 @@ $(document).ready(function() {
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        // Show success message
-                        const successMessage = document.createElement('div');
-                        successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up';
-                        successMessage.textContent = response.message || 'Category added successfully!';
-                        
-                        // Add animation keyframes if not already present
-                        if (!document.querySelector('#toast-animation')) {
-                            const style = document.createElement('style');
-                            style.id = 'toast-animation';
-                            style.textContent = `
-                                @keyframes fadeInUp {
-                                    from {
-                                        opacity: 0;
-                                        transform: translateY(20px);
-                                    }
-                                    to {
-                                        opacity: 1;
-                                        transform: translateY(0);
-                                    }
-                                }
-                                .animate-fade-in-up {
-                                    animation: fadeInUp 0.3s ease-out;
-                                }
-                            `;
-                            document.head.appendChild(style);
-                        }
-                        
-                        document.body.appendChild(successMessage);
-                        
-                        // Close modal
+                        // Close the modal
                         closeModal();
                         
-                        // Redirect after a brief delay
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 1000);
+                        // Fetch and update the groups list
+                        $.ajax({
+                            url: '/getGroups',
+                            type: 'GET',
+                            success: function(groupsData) {
+                                // Update the groups dropdown in expense modal
+                                const groupSelect = $('#group_id');
+                                groupSelect.empty();
+                                groupSelect.append('<option value="">Select Category</option>');
+                                groupsData.forEach(group => {
+                                    groupSelect.append(`<option value="${group.id}">${group.name}</option>`);
+                                });
+                                
+                                // Update the groups list in the sidebar
+                                const groupsList = $('.space-y-3');
+                                if (groupsList.length) {
+                                    groupsList.html(groupsData.map(group => `
+                                        <div class="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg group hover:bg-gray-100">
+                                            <span class="text-gray-700">${group.name}</span>
+                                            <div class="hidden group-hover:flex items-center space-x-2">
+                                                <button onclick="openEditGroupModal(${group.id}, '${group.name}')" 
+                                                        class="text-gray-500 hover:text-blue-600">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                                    </svg>
+                                                </button>
+                                                <button onclick="openDeleteGroupModal(${group.id})" 
+                                                        class="text-gray-500 hover:text-red-600">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    `).join(''));
+                                }
+                            },
+                            error: function() {
+                                showToast('Error fetching updated groups list', 'error');
+                            }
+                        });
+                        
+                        // Show success message
+                        showToast(response.message || 'Category added successfully!', 'success');
                     } else {
-                        displayErrors(response.errors || 'Failed to add category');
+                        displayErrors(response.errors);
                     }
                 },
-                error: function() {
-                    displayErrors('An error occurred while adding the category. Please try again.');
+                error: function(xhr) {
+                    let errorMessage = 'An error occurred while adding the category';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.errors) {
+                            displayErrors(response.errors);
+                            return;
+                        }
+                    } catch (e) {}
+                    displayErrors({ general: errorMessage });
                 }
             });
             
@@ -161,4 +180,35 @@ $(document).ready(function() {
         }
     });
 });
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 animate-fade-in-up ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
 </script>
+
+<style>
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.3s ease-out;
+}
+</style>
