@@ -94,8 +94,8 @@ function openExpenseModal() {
     
     // Select first group if available
     const groupSelect = document.getElementById('groupSelect');
-    if (groupSelect && groupSelect.options.length > 0) {
-        groupSelect.selectedIndex = 0;
+    if (groupSelect && groupSelect.options.length > 1) { // Changed from > 0 to > 1 to account for default option
+        groupSelect.selectedIndex = 1; // Select the first actual group (index 1)
     }
 
     // Show the modal
@@ -286,6 +286,38 @@ function resetExpenseForm() {
     
     // Set current date
     document.getElementById('expenseDate').value = getCurrentDate();
+}
+
+// Function to update expense modal dropdowns
+function updateExpenseModalDropdowns() {
+    $.ajax({
+        url: '/getGroups',
+        type: 'GET',
+        success: function(groupsData) {
+            // Update the groups dropdown in add expense modal
+            const groupSelect = $('#groupSelect');
+            // Update the groups dropdown in edit expense modal
+            const editGroupSelect = $('#editExpenseGroup');
+            
+            // Clear existing options
+            groupSelect.empty();
+            editGroupSelect.empty();
+            
+            // Add default option
+            groupSelect.append('<option value="">Select Category</option>');
+            editGroupSelect.append('<option value="">Select Category</option>');
+            
+            // Add group options
+            groupsData.forEach(group => {
+                const option = `<option value="${group.id}">${group.name}</option>`;
+                groupSelect.append(option);
+                editGroupSelect.append(option);
+            });
+        },
+        error: function() {
+            showToast('Error fetching groups', 'error');
+        }
+    });
 }
 
 // Function to update expense summary

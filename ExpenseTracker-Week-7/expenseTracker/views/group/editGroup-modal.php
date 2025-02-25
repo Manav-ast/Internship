@@ -99,8 +99,8 @@ const editGroupValidator = $('#editGroupForm').validate({
     messages: {
         group_name: {
             required: "Please enter a group name",
-            minlength: "Name must be at least 1 character",
-            maxlength: "Name cannot exceed 255 characters"
+            minlength: "Group name must be at least 1 character",
+            maxlength: "Group name cannot exceed 255 characters"
         }
     },
     errorElement: 'span',
@@ -116,7 +116,6 @@ const editGroupValidator = $('#editGroupForm').validate({
     },
     submitHandler: function(form) {
         const formData = $(form).serialize();
-        
         $.ajax({
             url: form.action,
             type: 'POST',
@@ -133,11 +132,16 @@ const editGroupValidator = $('#editGroupForm').validate({
                         type: 'GET',
                         success: function(groupsData) {
                             // Update the groups dropdown in expense modal
-                            const groupSelect = $('#group_id');
+                            const groupSelect = $('#groupSelect');
+                            const editGroupSelect = $('#editExpenseGroup');
                             groupSelect.empty();
+                            editGroupSelect.empty();
                             groupSelect.append('<option value="">Select Category</option>');
+                            editGroupSelect.append('<option value="">Select Category</option>');
                             groupsData.forEach(group => {
-                                groupSelect.append(`<option value="${group.id}">${group.name}</option>`);
+                                const option = `<option value="${group.id}">${group.name}</option>`;
+                                groupSelect.append(option);
+                                editGroupSelect.append(option);
                             });
                             
                             // Update the groups list in the sidebar
@@ -163,6 +167,8 @@ const editGroupValidator = $('#editGroupForm').validate({
                                     </div>
                                 `).join(''));
                             }
+                            // Update expenses list to reflect the new group name
+                            fetchAndUpdateExpenses();
                         },
                         error: function() {
                             showToast('Error fetching updated groups list', 'error');
@@ -170,7 +176,7 @@ const editGroupValidator = $('#editGroupForm').validate({
                     });
                     
                     // Show success message
-                    showToast(response.message || 'Group updated successfully!', 'success');
+                    showToast('Group updated successfully!');
                 } else {
                     displayEditGroupErrors(response.errors);
                 }
