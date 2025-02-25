@@ -1,31 +1,13 @@
-<?php
+<?php 
+$router->get('/','controller/index.php');
+$router->post('/addGroup','controller/group/storeGroup.php');
+$router->delete('/deleteGroup','controller/group/deleteGroup.php');
+$router->get('/getGroups','controller/group/getGroups.php');
+$router->get('/getExpenses','controller/expense/getExpenses.php');
 
-$router->get('/', 'index.php');
-$router->get('/expenses', 'expenses/index.php');
+$router->post('/addExpense','controller/expense/storeExpense.php');
+$router->delete('/deleteExpense','controller/expense/deleteExpense.php');
+$router->patch('/editGroup','controller/group/editGroup.php');
+$router->patch('/editExpense','controller/expense/editExpense.php');
 
-$router->get('/groups', 'groups/index.php');
-$router->get('/group', 'groups/show.php');
-$router->delete('/group', 'groups/destroy.php');
-
-$router->get('/group/edit', 'groups/edit.php');
-$router->patch('/group', 'groups/update.php');
-
-$router->get('/groups/create', 'groups/create.php');
-$router->post('/groups', 'groups/store.php');
-
-$router->get('/expenses', 'expenses/index.php');
-$router->get('/expenses/create', 'expenses/create.php');
-$router->post('/expenses', 'expenses/store.php');
-$router->delete('/expenses', 'expenses/destroy.php');
-
-$router->get('/expense', 'expenses/show.php');
-$router->get('/expense/edit', 'expenses/edit.php');
-$router->patch('/expense', 'expenses/update.php');
-
-$router->get('/register', 'registration/create.php')->only('guest');
-$router->post('/register', 'registration/store.php')->only('guest');
-
-
-$router->get('/login', 'sessions/create.php')->only('guest');
-$router->post('/sessions', 'sessions/store.php')->only('guest');
-$router->delete('/sessions', 'sessions/destroy.php')->only('auth');
+?>

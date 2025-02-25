@@ -1,30 +1,32 @@
-<?php
 
-use Core\Session;
-use Core\ValidationException;
+<?php 
+use Core\Router;
+const BASE_PATH = __DIR__. '/../';
+require BASE_PATH. "Core/functions.php";
 
-const BASE_PATH = __DIR__.'/../';
-require BASE_PATH.'vendor/autoload.php';
 
-session_start();
+spl_autoload_register(function ($class){
+    
+    // replace required to make usage of namespace  properly
+    $class = str_replace('\\','/',$class);
+    require base_path("{$class}.php");
+});
 
-require BASE_PATH.'Core/functions.php';
+// make object for router class:
+$router = new Router();
 
-require base_path('bootstrap.php');
+//now call routes.php to define routes array within router: 
 
-$router = new \Core\Router();
-$routes = require base_path('routes.php');
+require base_path('routes.php');
+$uri = parse_url($_SERVER['REQUEST_URI']);
+$path = rtrim($uri['path'], '/');
+$path = $path ?: '/';
 
-$uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
-try {
-    $router->route($uri, $method);
-} catch (ValidationException $exception) {
-    Session::flash('errors', $exception->errors);
-    Session::flash('old', $exception->old);
 
-    return redirect($router->previousUrl());
-}
+// calling route method from Router class
+$router->route($path,$method);
+// dd($try);
+?>
 
-Session::unflash();
