@@ -38,15 +38,7 @@
                     </div>
                 </div>
 
-                <!-- <div>
-                    @if($errors->all())
-                    <ul class="mt-10">
-                        @foreach($errors->all() as $error)
-                        <li class="text-red-500">{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    @endif
-                </div> -->
+                
             </div>
 
 
