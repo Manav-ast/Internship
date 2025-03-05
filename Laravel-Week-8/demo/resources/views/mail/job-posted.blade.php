@@ -7,5 +7,5 @@
 </p>
 
 <p>
-    <a href="{{ url('/jobs/' . $job->id) }}">View Your Job Listing</a>
+    <a href="{{ 'http://127.0.0.1:8000/'. '/jobs/' . $job->id) }}">View Your Job Listing</a>
 </p>
